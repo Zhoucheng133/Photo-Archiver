@@ -26,7 +26,17 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    final brightness = MediaQuery.of(context).platformBrightness;
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed( 
+          seedColor: Colors.lime, 
+          brightness: brightness
+        ), 
+        useMaterial3: true,
+        // textTheme: GoogleFonts.notoSansScTextTheme(),
+      ),
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: MainWindow()

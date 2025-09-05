@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -45,21 +47,44 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
         Row(
           children: [
             Expanded(child: DragToMoveArea(child: Container())),
-            WindowCaptionButton.minimize(
-              onPressed: ()=>windowManager.minimize()
-            ),
-            isMax ?
-            WindowCaptionButton.unmaximize(
-              onPressed: ()=>windowManager.unmaximize()
-            ):
-            WindowCaptionButton.maximize(
-              onPressed: ()=>windowManager.maximize()
-            ),  
-            WindowCaptionButton.close(
-              onPressed: ()=>windowManager.close()
+            if(Platform.isWindows) Row(
+              children: [
+                WindowCaptionButton.minimize(
+                  brightness: Theme.of(context).brightness,
+                  onPressed: ()=>windowManager.minimize()
+                ),
+                isMax ? WindowCaptionButton.unmaximize(
+                  brightness: Theme.of(context).brightness,
+                  onPressed: ()=>windowManager.unmaximize()
+                ) : WindowCaptionButton.maximize(
+                  brightness: Theme.of(context).brightness,
+                  onPressed: ()=>windowManager.maximize()
+                ),  
+                WindowCaptionButton.close(
+                  brightness: Theme.of(context).brightness,
+                  onPressed: ()=>windowManager.close()
+                ),
+              ],
             ),
           ],
         ),
+
+        Expanded(
+          child: Center(
+            child: TextButton(
+              onPressed: (){
+                showDialog(
+                  context: context, 
+                  builder: (BuildContext context)=>AlertDialog(
+                    title: const Text("Text Label"),
+                    content: const Text("Test Content"),
+                  )
+                );
+              }, 
+              child: const Text("Test")
+            ),
+          )
+        )
       ],
     );
   }
