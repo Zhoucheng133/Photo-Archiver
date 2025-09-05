@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_archiver/main_window.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -34,7 +35,7 @@ class MainApp extends StatelessWidget {
           brightness: brightness
         ), 
         useMaterial3: true,
-        // textTheme: GoogleFonts.notoSansScTextTheme(),
+        textTheme: GoogleFonts.notoSansScTextTheme(),
       ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
