@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:photo_archiver/controllers/controller.dart';
+import 'package:photo_archiver/views/add_view.dart';
 import 'package:window_manager/window_manager.dart';
 
 class MainWindow extends StatefulWidget {
@@ -11,6 +14,8 @@ class MainWindow extends StatefulWidget {
 }
 
 class _MainWindowState extends State<MainWindow> with WindowListener {
+
+  final Controller controller=Get.find();
 
   @override
   void initState() {
@@ -44,46 +49,37 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            Expanded(child: DragToMoveArea(child: Container())),
-            if(Platform.isWindows) Row(
-              children: [
-                WindowCaptionButton.minimize(
-                  brightness: Theme.of(context).brightness,
-                  onPressed: ()=>windowManager.minimize()
-                ),
-                isMax ? WindowCaptionButton.unmaximize(
-                  brightness: Theme.of(context).brightness,
-                  onPressed: ()=>windowManager.unmaximize()
-                ) : WindowCaptionButton.maximize(
-                  brightness: Theme.of(context).brightness,
-                  onPressed: ()=>windowManager.maximize()
-                ),  
-                WindowCaptionButton.close(
-                  brightness: Theme.of(context).brightness,
-                  onPressed: ()=>windowManager.close()
-                ),
-              ],
-            ),
-          ],
+        SizedBox(
+          height: 30,
+          child: Row(
+            children: [
+              Expanded(child: DragToMoveArea(child: Container())),
+              if(Platform.isWindows) Row(
+                children: [
+                  WindowCaptionButton.minimize(
+                    brightness: Theme.of(context).brightness,
+                    onPressed: ()=>windowManager.minimize()
+                  ),
+                  isMax ? WindowCaptionButton.unmaximize(
+                    brightness: Theme.of(context).brightness,
+                    onPressed: ()=>windowManager.unmaximize()
+                  ) : WindowCaptionButton.maximize(
+                    brightness: Theme.of(context).brightness,
+                    onPressed: ()=>windowManager.maximize()
+                  ),  
+                  WindowCaptionButton.close(
+                    brightness: Theme.of(context).brightness,
+                    onPressed: ()=>windowManager.close()
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-
         Expanded(
-          child: Center(
-            child: TextButton(
-              onPressed: (){
-                showDialog(
-                  context: context, 
-                  builder: (BuildContext context)=>AlertDialog(
-                    title: const Text("Text Label"),
-                    content: const Text("Test Content"),
-                  )
-                );
-              }, 
-              child: const Text("Test")
-            ),
-          )
+          child: Obx(()=>
+            controller.dir.isEmpty ? AddView() : Container()
+          ),
         )
       ],
     );
