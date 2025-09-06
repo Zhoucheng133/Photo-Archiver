@@ -12,7 +12,7 @@ class Controller extends GetxController {
   late ScanDir scanDir;
 
   void initLib(){
-    final dynamicLib=DynamicLibrary.open(Platform.isMacOS ? 'lib.dylib' : 'lib.dll');
+    final dynamicLib=DynamicLibrary.open(Platform.isMacOS ? 'core.dylib' : 'core.dll');
     scanDir=dynamicLib.lookup<NativeFunction<ScanDir>>("ScanDir").asFunction();
   }
 
@@ -23,7 +23,7 @@ class Controller extends GetxController {
   RxString dir="".obs;
 
   void analyseDir(String dir, BuildContext context){
-    final data=scanDir(dir.toNativeUtf8());
+    final data=scanDir(dir.toNativeUtf8()).toDartString();
     print(data);
   }
 }
