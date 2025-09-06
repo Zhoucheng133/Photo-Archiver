@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   desktop_drop: ^0.6.1
+  ffi: ^2.1.4
   file_picker: ^10.3.2
   flutter:
     sdk: flutter
