@@ -78,7 +78,9 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
         ),
         Expanded(
           child: Obx(()=>
-            controller.dir.isEmpty ? AddView() : Container()
+            controller.loading.value ? Center(
+              child: CircularProgressIndicator(),
+            ) : controller.dir.isEmpty ? AddView() : Container()
           ),
         )
       ],
