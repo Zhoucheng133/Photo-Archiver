@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'dart:ffi';
 import 'package:photo_archiver/dialog/dialogs.dart';
 
-enum ArchiveBy{
+enum GroupBy{
   day,
   month,
   year
@@ -38,8 +38,36 @@ class Controller extends GetxController {
 
   RxString dir="".obs;
   RxList<PhotoData> photoList=RxList([]);
-  Rx<ArchiveBy> archiveBy=Rx(ArchiveBy.month);
+  Rx<GroupBy> groupBy=Rx(GroupBy.month);
   RxBool loading=false.obs;
+
+  RxList<int> years=RxList([]);
+  RxList<int> month=RxList([]);
+  RxList<int> days=RxList([]);
+
+  RxMap<String, List<PhotoData>> groupedData=RxMap({});
+
+ void groupHandler({GroupBy? groupBy}){
+    groupBy = groupBy ?? this.groupBy.value;
+    final Map<String, List<PhotoData>> grouped = {};
+    for (var photo in photoList) {
+      String key;
+      switch (groupBy) {
+        case GroupBy.year:
+          key='${photo.year}';
+          break;
+        case GroupBy.month:
+          key="${photo.year}年${photo.month}月";
+          break;
+        case GroupBy.day:
+          key="${photo.year}年${photo.month}月${photo.day}日";
+          break;
+      }
+      grouped.putIfAbsent(key, () => []);
+      grouped[key]!.add(photo);
+    }
+    groupedData.value=grouped;
+  }
 
   static List isolateScan(String dir){
     final dynamicLib=DynamicLibrary.open(Platform.isMacOS ? 'core.dylib' : 'core.dll');
@@ -58,6 +86,7 @@ class Controller extends GetxController {
     loading.value=false;
 
     photoList.value=list.map((item)=>PhotoData.decode(item)).toList();
+    groupHandler();
     this.dir.value=dir;
   }
 }
