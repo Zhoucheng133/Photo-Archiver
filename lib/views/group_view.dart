@@ -153,6 +153,7 @@ class _GroupViewState extends State<GroupView> {
               IconButton(
                 onPressed: (){
                   controller.dir.value="";
+                  controller.photoList.value=[];
                 }, 
                 icon: Icon(
                   Icons.close_rounded
