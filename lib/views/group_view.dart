@@ -166,7 +166,6 @@ class _GroupViewState extends State<GroupView> {
                   controller: outputText,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: '随意取一个',
                     isCollapsed: true,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12)
                   ),
@@ -185,6 +184,8 @@ class _GroupViewState extends State<GroupView> {
                   setState(() {
                     loading=false;
                   });
+                  controller.dir.value="";
+                  controller.photoList.value=[];
                 }, 
                 child: const Text('整理')
               )
