@@ -11,6 +11,7 @@ Future<void> main() async {
 
   WindowOptions windowOptions = WindowOptions(
     size: Size(800, 600),
+    title: "PhotoArchiver",
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
