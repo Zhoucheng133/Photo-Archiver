@@ -34,6 +34,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final brightness = MediaQuery.of(context).platformBrightness;
     return MaterialApp(
+      navigatorKey: navigatorKey,
       theme: brightness==Brightness.dark ? ThemeData.dark().copyWith(
         textTheme: GoogleFonts.notoSansScTextTheme().apply(
           bodyColor: Colors.white,

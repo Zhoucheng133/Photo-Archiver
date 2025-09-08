@@ -9,6 +9,8 @@ import 'dart:ffi';
 import 'package:photo_archiver/dialog/dialogs.dart';
 import 'package:path/path.dart' as p;
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 enum GroupBy{
   day,
   month,
@@ -160,6 +162,7 @@ class Controller extends GetxController {
     }
 
     late final StreamSubscription sub;
+    final completer = Completer<void>();
     sub = receivePort.listen((message) {
       if (message is Map) {
         switch (message['type']) {
@@ -172,18 +175,29 @@ class Controller extends GetxController {
             photoList.add(PhotoData.decode(jsonDecode(photo)));
             break;
           case 'done':
-            if(photoList.isEmpty){
-              showErrWarnDialog(context, "无法解析文件夹", "文件夹中不含任何图片文件或者无法解析任意一个图片文件");
-            }
-            loading.value = false;
             groupHandler();
-            this.dir.value=dir;
             sub.cancel();
             receivePort.close();
             isolate?.kill(priority: Isolate.immediate);
+            completer.complete();
             break;
         }
       }
     });
+
+    await completer.future;
+    final context = navigatorKey.currentContext;
+    if(photoList.isEmpty){
+      if(context!=null && context.mounted){
+        await showErrWarnDialog(
+          context, 
+          "无法解析文件夹", 
+          "文件夹中不含任何图片文件或者无法解析任意一个图片文件"
+        );
+      }
+    }else{
+      this.dir.value=dir;
+    }
+    loading.value = false;
   }
 }
