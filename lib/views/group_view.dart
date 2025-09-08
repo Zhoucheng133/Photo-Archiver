@@ -16,6 +16,8 @@ class _GroupViewState extends State<GroupView> {
 
   final Controller controller=Get.find();
 
+  bool loading=false;
+
   Color buttonColor(BuildContext context, bool hover, bool selected){
     if(Theme.of(context).brightness==Brightness.light){
       return selected ? Theme.of(context).colorScheme.primary.withAlpha(18) : hover ? Theme.of(context).colorScheme.primary.withAlpha(12) : Theme.of(context).colorScheme.primary.withAlpha(0);
@@ -174,8 +176,14 @@ class _GroupViewState extends State<GroupView> {
               ),
               const SizedBox(width: 10,),
               FilledButton(
-                onPressed: (){
-                  controller.movePhotos(context);
+                onPressed: loading ? null : () async {
+                  setState(() {
+                    loading=true;
+                  });
+                  await controller.movePhotos(context);
+                  setState(() {
+                    loading=false;
+                  });
                 }, 
                 child: const Text('整理')
               )
