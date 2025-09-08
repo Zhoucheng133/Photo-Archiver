@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_archiver/components/sidebar_item.dart';
 import 'package:photo_archiver/controllers/controller.dart';
 
@@ -54,6 +55,7 @@ class _GroupViewState extends State<GroupView> {
                             ).toList(),
                             onChanged: (val){
                               if(val!=null){
+                                controller.selectedKey.value=0;
                                 controller.groupBy.value=val;
                                 controller.groupHandler();
                               }
@@ -82,7 +84,47 @@ class _GroupViewState extends State<GroupView> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Obx(
+                        ()=> Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                controller.groupedData.keys.toList()[controller.selectedKey.value],
+                                style: GoogleFonts.notoSansSc(
+                                  fontSize: 20
+                                ),
+                              )
+                            ),
+                            Divider(),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: controller.groupedData.values.toList()[controller.selectedKey.value].length,
+                                itemBuilder: (BuildContext context, int index)=>ListTile(
+                                  contentPadding: EdgeInsets.only(left: 0),
+                                  minTileHeight: 40,
+                                  title: Text(
+                                    controller.groupedData.values.toList()[controller.selectedKey.value][index].name,
+                                    style: GoogleFonts.notoSansSc(
+                                      fontSize: 15
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    controller.groupedData.values.toList()[controller.selectedKey.value][index].getDate(),
+                                    style: GoogleFonts.notoSansSc(
+                                      fontSize: 13
+                                    ),
+                                  ),
+                                )
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 )

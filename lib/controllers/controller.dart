@@ -41,6 +41,10 @@ class PhotoData{
 
     return PhotoData(map["dir"], map["name"], year, month, day);
   }
+
+  String getDate(){
+    return "$year/$month/$day";
+  }
 }
 
 typedef ScanDir = Pointer<Utf8> Function(Pointer<Utf8>);
@@ -79,7 +83,8 @@ class Controller extends GetxController {
       grouped.putIfAbsent(key, () => []);
       grouped[key]!.add(photo);
     }
-    groupedData.value=grouped;
+    var sortedKeys = grouped.keys.toList()..sort();
+    groupedData.value={ for (var k in sortedKeys) k: grouped[k]! };
   }
 
   static List isolateScan(String dir){

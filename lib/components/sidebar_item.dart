@@ -28,7 +28,7 @@ class _SidebarItemState extends State<SidebarItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsGeometry.symmetric(horizontal: 10, vertical: 3),
+      padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         onEnter: (_)=>setState(() {
