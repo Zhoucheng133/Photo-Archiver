@@ -1,11 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 import 'package:ffi/ffi.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:ffi';
 import 'package:photo_archiver/dialog/dialogs.dart';
+import 'package:path/path.dart' as p;
 
 enum GroupBy{
   day,
@@ -48,6 +50,7 @@ class PhotoData{
 }
 
 typedef ScanDir = Pointer<Utf8> Function(Pointer<Utf8>);
+typedef GetPhoto = Pointer<Utf8> Function(Pointer<Utf8>);
 
 class Controller extends GetxController {
 
@@ -55,6 +58,7 @@ class Controller extends GetxController {
   RxList<PhotoData> photoList=RxList([]);
   Rx<GroupBy> groupBy=Rx(GroupBy.month);
   RxBool loading=false.obs;
+  RxString nowFile="".obs;
 
   RxList<int> years=RxList([]);
   RxList<int> month=RxList([]);
@@ -116,24 +120,74 @@ class Controller extends GetxController {
     groupedData.value={ for (var k in sortedKeys) k: grouped[k]! };
   }
 
-  static List isolateScan(String dir){
+  static Future<void> isolateScan(List args) async {
+    // final dynamicLib=DynamicLibrary.open(Platform.isMacOS ? 'core.dylib' : 'core.dll');
+    // final ScanDir scanDir=dynamicLib.lookup<NativeFunction<ScanDir>>("ScanDir").asFunction();
+    // final data=scanDir(dir.toNativeUtf8()).toDartString();
+    // return jsonDecode(data);
+    final dir = args[0] as String;
+    final sendPort = args[1] as SendPort;
     final dynamicLib=DynamicLibrary.open(Platform.isMacOS ? 'core.dylib' : 'core.dll');
-    final ScanDir scanDir=dynamicLib.lookup<NativeFunction<ScanDir>>("ScanDir").asFunction();
-    final data=scanDir(dir.toNativeUtf8()).toDartString();
-    return jsonDecode(data);
+    final GetPhoto getPhoto=dynamicLib.lookup<NativeFunction<GetPhoto>>("GetPhoto").asFunction();
+
+    try {
+      await for (final entity in Directory(dir).list(recursive: false)){
+        if (entity is! File) continue;
+        sendPort.send({
+          'type': 'progress_start',
+          'path': entity.path,
+        });
+        final pathPtr = entity.path.toNativeUtf8();
+        final resPtr = getPhoto(pathPtr);
+        final jsonStr = resPtr.toDartString();
+        if (jsonStr.isEmpty) continue;
+        sendPort.send({
+          'type': 'photo',
+          'photo': jsonStr,
+        });
+      }
+      sendPort.send({'type': 'done'});
+    } catch (_) {}
   }
 
   Future<void> analyseDir(String dir, BuildContext context) async {
     loading.value=true;
-    List list=await compute(isolateScan, dir);
-    if(list.isEmpty && context.mounted){
-      showErrWarnDialog(context, "无法解析文件夹", "文件夹中不含任何图片文件或者无法解析任意一个图片文件");
+    
+    final receivePort = ReceivePort();
+    Isolate? isolate;
+    try {
+      isolate = await Isolate.spawn(isolateScan, [dir, receivePort.sendPort]);
+    } catch (e) {
+      loading.value = false;
+      receivePort.close();
       return;
     }
-    loading.value=false;
 
-    photoList.value=list.map((item)=>PhotoData.decode(item)).toList();
-    groupHandler();
-    this.dir.value=dir;
+    late final StreamSubscription sub;
+    sub = receivePort.listen((message) {
+      if (message is Map) {
+        switch (message['type']) {
+          case 'progress_start':
+            final String path = message['path'] ?? "";
+            nowFile.value=p.basename(path);
+            break;
+          case 'photo':
+            final String photo=message['photo'];
+            photoList.add(PhotoData.decode(jsonDecode(photo)));
+            break;
+          case 'done':
+            if(photoList.isEmpty){
+              showErrWarnDialog(context, "无法解析文件夹", "文件夹中不含任何图片文件或者无法解析任意一个图片文件");
+            }
+            loading.value = false;
+            groupHandler();
+            this.dir.value=dir;
+            sub.cancel();
+            receivePort.close();
+            isolate?.kill(priority: Isolate.immediate);
+            break;
+        }
+      }
+    });
   }
 }
