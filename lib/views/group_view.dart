@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_archiver/components/sidebar_item.dart';
@@ -33,6 +34,34 @@ class _GroupViewState extends State<GroupView> {
                 width: 200,
                 child: Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Obx(
+                        ()=> DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            value: controller.groupBy.value,
+                            buttonStyleData: ButtonStyleData(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10)
+                              )
+                            ),
+                            isExpanded: true,
+                            items: GroupBy.values.map((item)=>
+                              DropdownMenuItem(
+                                value: item,
+                                child: Text(groupByToString(item)),
+                              )
+                            ).toList(),
+                            onChanged: (val){
+                              if(val!=null){
+                                controller.groupBy.value=val;
+                                controller.groupHandler();
+                              }
+                            },
+                          )
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 10),

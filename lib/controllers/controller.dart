@@ -13,6 +13,17 @@ enum GroupBy{
   year
 }
 
+String groupByToString(GroupBy groupBy){
+  switch (groupBy) {
+    case GroupBy.day:
+      return "年-月-日";
+    case GroupBy.month:
+      return "年-月";
+    case GroupBy.year:
+      return "年份";
+  }
+}
+
 class PhotoData{
   String dir;
   String name;
