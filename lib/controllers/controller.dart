@@ -64,6 +64,35 @@ class Controller extends GetxController {
 
   RxMap<String, List<PhotoData>> groupedData=RxMap({});
 
+
+  Future<void> movePhotos(BuildContext context) async {
+    for (var entry in groupedData.entries) {
+      String key = entry.key;
+      List<PhotoData> photos = entry.value;
+
+      for (var photo in photos) {
+        // 新文件夹路径
+        String newDirPath = '${photo.dir}/$key';
+        Directory newDir = Directory(newDirPath);
+
+        // 如果不存在就创建
+        if (!await newDir.exists()) {
+          await newDir.create(recursive: true);
+        }
+
+        // 源文件
+        File sourceFile = File('${photo.dir}/${photo.name}');
+        // 目标文件
+        File targetFile = File('$newDirPath/${photo.name}');
+
+        try {
+          await sourceFile.rename(targetFile.path);
+        } catch (_) {}
+      }
+    }
+    if(context.mounted) showErrWarnDialog(context, "整理完成", "已经将所有图片文件以${groupByToString(groupBy.value)}方式整理");
+  }
+
  void groupHandler({GroupBy? groupBy}){
     groupBy = groupBy ?? this.groupBy.value;
     final Map<String, List<PhotoData>> grouped = {};

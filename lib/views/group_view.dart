@@ -24,6 +24,17 @@ class _GroupViewState extends State<GroupView> {
     }
   }
 
+  TextEditingController outputText=TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      outputText.text=controller.dir.value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -132,6 +143,45 @@ class _GroupViewState extends State<GroupView> {
             ],
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: (){
+                  controller.dir.value="";
+                }, 
+                icon: Icon(
+                  Icons.close_rounded
+                )
+              ),
+              const SizedBox(width: 10,),
+              Expanded(
+                child: TextField(
+                  enabled: false,
+                  controller: outputText,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: '随意取一个',
+                    isCollapsed: true,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12)
+                  ),
+                  style: GoogleFonts.notoSansSc(
+                    fontSize: 14
+                  ),
+                )
+              ),
+              const SizedBox(width: 10,),
+              FilledButton(
+                onPressed: (){
+                  controller.movePhotos(context);
+                }, 
+                child: const Text('整理')
+              )
+            ],
+          ),
+        )
       ],
     );
   }
