@@ -118,6 +118,12 @@ class Controller extends GetxController {
     groupedData.value={ for (var k in sortedKeys) k: grouped[k]! };
   }
 
+  void closeDir(){
+    dir.value="";
+    photoList.value=[];
+    selectedKey.value=0;
+  }
+
   static Future<void> isolateScan(List args) async {
     // final dynamicLib=DynamicLibrary.open(Platform.isMacOS ? 'core.dylib' : 'core.dll');
     // final ScanDir scanDir=dynamicLib.lookup<NativeFunction<ScanDir>>("ScanDir").asFunction();

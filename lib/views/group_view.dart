@@ -151,10 +151,7 @@ class _GroupViewState extends State<GroupView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
-                onPressed: (){
-                  controller.dir.value="";
-                  controller.photoList.value=[];
-                }, 
+                onPressed: ()=>controller.closeDir(), 
                 icon: Icon(
                   Icons.close_rounded
                 )
@@ -184,8 +181,7 @@ class _GroupViewState extends State<GroupView> {
                   setState(() {
                     loading=false;
                   });
-                  controller.dir.value="";
-                  controller.photoList.value=[];
+                  controller.closeDir();
                 }, 
                 child: const Text('整理')
               )
