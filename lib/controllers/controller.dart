@@ -45,6 +45,8 @@ class Controller extends GetxController {
   RxList<int> month=RxList([]);
   RxList<int> days=RxList([]);
 
+  RxInt selectedKey=0.obs;
+
   RxMap<String, List<PhotoData>> groupedData=RxMap({});
 
  void groupHandler({GroupBy? groupBy}){
