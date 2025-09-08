@@ -96,7 +96,7 @@ class _GroupViewState extends State<GroupView> {
                   padding: const EdgeInsets.only(right: 15, bottom: 15),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).brightness==Brightness.dark ? Colors.grey[900] : Colors.white,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Padding(
