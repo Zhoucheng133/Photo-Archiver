@@ -70,6 +70,29 @@ class Controller extends GetxController {
 
   RxMap<String, List<PhotoData>> groupedData=RxMap({});
 
+  Future<void> previewPhoto(BuildContext context, int index) async {
+
+    final String imagePath=p.join(photoList[index].dir, photoList[index].name);
+    File imageFile=File(imagePath);
+
+    await showDialog(
+      context: context, 
+      builder: (context)=>AlertDialog(
+        title: Text(photoList[index].name),
+        content: Image.file(
+          imageFile,
+          cacheHeight: 450,
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: ()=>Navigator.pop(context), 
+            child: const Text('关闭')
+          )
+        ],
+      )
+    );
+    imageCache.clear();
+  }
 
   Future<void> movePhotos(BuildContext context) async {
     for (var entry in groupedData.entries) {
@@ -125,10 +148,6 @@ class Controller extends GetxController {
   }
 
   static Future<void> isolateScan(List args) async {
-    // final dynamicLib=DynamicLibrary.open(Platform.isMacOS ? 'core.dylib' : 'core.dll');
-    // final ScanDir scanDir=dynamicLib.lookup<NativeFunction<ScanDir>>("ScanDir").asFunction();
-    // final data=scanDir(dir.toNativeUtf8()).toDartString();
-    // return jsonDecode(data);
     final dir = args[0] as String;
     final sendPort = args[1] as SendPort;
     final dynamicLib=DynamicLibrary.open(Platform.isMacOS ? 'core.dylib' : 'core.dll');

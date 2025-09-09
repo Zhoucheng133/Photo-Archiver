@@ -99,12 +99,12 @@ class _GroupViewState extends State<GroupView> {
                       color: Theme.of(context).brightness==Brightness.dark ? Colors.grey[900] : Colors.white,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Obx(
-                        ()=> Column(
-                          children: [
-                            Align(
+                    child: Obx(
+                      ()=> Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
+                            child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 controller.groupedData.keys.toList()[controller.selectedKey.value],
@@ -113,12 +113,17 @@ class _GroupViewState extends State<GroupView> {
                                 ),
                               )
                             ),
-                            Divider(),
-                            Expanded(
-                              child: ListView.builder(
-                                itemCount: controller.groupedData.values.toList()[controller.selectedKey.value].length,
-                                itemBuilder: (BuildContext context, int index)=>ListTile(
-                                  contentPadding: EdgeInsets.only(left: 0),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Divider(),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: controller.groupedData.values.toList()[controller.selectedKey.value].length,
+                              itemBuilder: (BuildContext context, int index)=>Material(
+                                child: ListTile(
+                                  tileColor: Colors.white,
                                   minTileHeight: 40,
                                   title: Text(
                                     controller.groupedData.values.toList()[controller.selectedKey.value][index].name,
@@ -132,11 +137,12 @@ class _GroupViewState extends State<GroupView> {
                                       fontSize: 13
                                     ),
                                   ),
-                                )
-                              ),
-                            )
-                          ],
-                        ),
+                                  onTap: ()=>controller.previewPhoto(context, index),
+                                ),
+                              )
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
