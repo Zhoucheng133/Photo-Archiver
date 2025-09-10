@@ -1,4 +1,4 @@
-# Photo Archiver
+# PhotoArchiver
 
 ## 简介
 
