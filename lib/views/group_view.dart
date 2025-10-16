@@ -104,14 +104,23 @@ class _GroupViewState extends State<GroupView> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                controller.groupedData.keys.toList()[controller.selectedKey.value],
-                                style: GoogleFonts.notoSansSc(
-                                  fontSize: 20
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    controller.groupedData.keys.toList()[controller.selectedKey.value],
+                                    style: GoogleFonts.notoSansSc(
+                                      fontSize: 20
+                                    ),
+                                  ),
                                 ),
-                              )
+                                Text(
+                                  "${controller.groupedData.values.toList()[controller.selectedKey.value].length}张照片",
+                                  style: GoogleFonts.notoSansSc(
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                           Padding(
