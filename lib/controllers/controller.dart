@@ -68,6 +68,10 @@ class Controller extends GetxController {
 
   RxInt selectedKey=0.obs;
 
+  Isolate? isolate;
+  final receivePort = ReceivePort();
+  late final StreamSubscription sub;
+
   RxMap<String, List<PhotoData>> groupedData=RxMap({});
 
   Future<void> previewPhoto(BuildContext context, int index) async {
@@ -173,11 +177,19 @@ class Controller extends GetxController {
     } catch (_) {}
   }
 
+  Future<void> stopScan() async {
+    if(isolate!=null){
+      isolate?.kill(priority: Isolate.immediate);
+      isolate=null;
+    }
+    loading.value=false;
+    dir.value="";
+    receivePort.close();
+    sub.cancel();
+  }
+
   Future<void> analyseDir(String dir, BuildContext context) async {
     loading.value=true;
-    
-    final receivePort = ReceivePort();
-    Isolate? isolate;
     try {
       isolate = await Isolate.spawn(isolateScan, [dir, receivePort.sendPort]);
     } catch (e) {
@@ -185,8 +197,6 @@ class Controller extends GetxController {
       receivePort.close();
       return;
     }
-
-    late final StreamSubscription sub;
     final completer = Completer<void>();
     sub = receivePort.listen((message) {
       if (message is Map) {
