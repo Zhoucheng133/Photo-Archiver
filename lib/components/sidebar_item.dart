@@ -19,7 +19,7 @@ class _SidebarItemState extends State<SidebarItem> {
 
   Color buttonColor(bool hover, bool selected){
     if(Theme.of(context).brightness==Brightness.light){
-      return selected ? Theme.of(context).colorScheme.primary.withAlpha(18) : hover ? Theme.of(context).colorScheme.primary.withAlpha(12) : Theme.of(context).colorScheme.primary.withAlpha(0);
+      return selected ? Theme.of(context).colorScheme.primary.withAlpha(18) : hover ? Theme.of(context).colorScheme.primary.withAlpha(10) : Theme.of(context).colorScheme.primary.withAlpha(0);
     }else{
       return selected ? Color.fromARGB(255, 60, 60, 60) : hover ? Color.fromARGB(255, 40, 40, 40) : Theme.of(context).colorScheme.surface;
     }
@@ -30,7 +30,7 @@ class _SidebarItemState extends State<SidebarItem> {
     return Padding(
       padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
       child: MouseRegion(
-        cursor: SystemMouseCursors.click,
+        cursor: SystemMouseCursors.basic,
         onEnter: (_)=>setState(() {
           hover=true;
         }),
@@ -44,7 +44,7 @@ class _SidebarItemState extends State<SidebarItem> {
               duration: const Duration(milliseconds: 200),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: buttonColor(false, controller.selectedKey.value==widget.index)
+                color: buttonColor(hover, controller.selectedKey.value==widget.index)
               ),
               height: 40,
               child: Align(
