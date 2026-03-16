@@ -36,6 +36,8 @@ class _GroupViewState extends State<GroupView> {
     });
   }
 
+  bool hover=false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -56,6 +58,50 @@ class _GroupViewState extends State<GroupView> {
                             buttonStyleData: ButtonStyleData(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10)
+                              )
+                            ),
+                            customButton: MouseRegion(
+                              cursor: SystemMouseCursors.basic,
+                              onEnter: (_) => setState(() => hover = true),
+                              onExit: (_) => setState(() => hover = false),
+                              child: AnimatedContainer(
+                                width: double.infinity,
+                                height: 40,
+                                duration: const Duration(milliseconds: 200),
+                                decoration: BoxDecoration(
+                                  color: hover ? Theme.of(context).colorScheme.primary.withAlpha(12) : Theme.of(context).colorScheme.primary.withAlpha(0),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10, right: 10),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          groupByToString(controller.groupBy.value),
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        )
+                                      ),
+                                      Icon(
+                                        Icons.arrow_drop_down,
+                                        size: 22,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            menuItemStyleData: MenuItemStyleData(
+                              height: 45,
+                            ),
+                            dropdownStyleData: DropdownStyleData(
+                              padding: const EdgeInsets.all(0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).colorScheme.surface
                               )
                             ),
                             isExpanded: true,
@@ -92,7 +138,7 @@ class _GroupViewState extends State<GroupView> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 15, bottom: 15),
+                  padding: const EdgeInsets.only(right: 15, bottom: 5),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).brightness==Brightness.dark ? Colors.grey[900] : Colors.white,
@@ -161,7 +207,7 @@ class _GroupViewState extends State<GroupView> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(15.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

@@ -46,7 +46,7 @@ class _SidebarItemState extends State<SidebarItem> {
                 borderRadius: BorderRadius.circular(10),
                 color: buttonColor(hover, controller.selectedKey.value==widget.index)
               ),
-              height: 40,
+              height: 45,
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
