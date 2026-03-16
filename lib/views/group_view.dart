@@ -1,4 +1,3 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_archiver/components/sidebar_item.dart';
@@ -50,70 +49,93 @@ class _GroupViewState extends State<GroupView> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Obx(
-                        ()=> DropdownButtonHideUnderline(
-                          child: DropdownButton2(
-                            value: controller.groupBy.value,
-                            buttonStyleData: ButtonStyleData(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10)
-                              )
-                            ),
-                            customButton: MouseRegion(
-                              cursor: SystemMouseCursors.basic,
-                              child: Container(
-                                width: double.infinity,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 10, right: 10),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          groupByToString(controller.groupBy.value),
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                          ),
-                                        )
-                                      ),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        size: 22,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            menuItemStyleData: MenuItemStyleData(
-                              height: 45,
-                            ),
-                            dropdownStyleData: DropdownStyleData(
-                              padding: const EdgeInsets.all(0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Theme.of(context).colorScheme.surface
-                              )
-                            ),
+                        () => DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                            isDense: true,
+                            borderRadius: BorderRadius.circular(10),
+                            focusColor: Colors.transparent,
                             isExpanded: true,
+                            value: controller.groupBy.value,
                             items: GroupBy.values.map((item)=>
                               DropdownMenuItem(
                                 value: item,
                                 child: Text(groupByToString(item)),
                               )
-                            ).toList(),
+                            ).toList(), 
                             onChanged: (val){
                               if(val!=null){
                                 controller.selectedKey.value=0;
                                 controller.groupBy.value=val;
                                 controller.groupHandler();
                               }
-                            },
-                          )
-                        ),
+                            }
+                          ),
+                        )
+                        // ()=> DropdownButtonHideUnderline(
+                        //   child: DropdownButton2(
+                        //     value: controller.groupBy.value,
+                        //     buttonStyleData: ButtonStyleData(
+                        //       decoration: BoxDecoration(
+                        //         borderRadius: BorderRadius.circular(10)
+                        //       )
+                        //     ),
+                        //     customButton: MouseRegion(
+                        //       cursor: SystemMouseCursors.basic,
+                        //       child: Container(
+                        //         width: double.infinity,
+                        //         height: 40,
+                        //         decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(10),
+                        //         ),
+                        //         child: Padding(
+                        //           padding: const EdgeInsets.only(left: 10, right: 10),
+                        //           child: Row(
+                        //             mainAxisSize: MainAxisSize.min,
+                        //             children: [
+                        //               Expanded(
+                        //                 child: Text(
+                        //                   groupByToString(controller.groupBy.value),
+                        //                   style: TextStyle(
+                        //                     fontSize: 14,
+                        //                   ),
+                        //                 )
+                        //               ),
+                        //               Icon(
+                        //                 Icons.arrow_drop_down,
+                        //                 size: 22,
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     menuItemStyleData: MenuItemStyleData(
+                        //       height: 45,
+                        //     ),
+                        //     dropdownStyleData: DropdownStyleData(
+                        //       padding: const EdgeInsets.all(0),
+                        //       decoration: BoxDecoration(
+                        //         borderRadius: BorderRadius.circular(10),
+                        //         color: Theme.of(context).colorScheme.surface
+                        //       )
+                        //     ),
+                        //     isExpanded: true,
+                        //     items: GroupBy.values.map((item)=>
+                        //       DropdownMenuItem(
+                        //         value: item,
+                        //         child: Text(groupByToString(item)),
+                        //       )
+                        //     ).toList(),
+                        //     onChanged: (val){
+                        //       if(val!=null){
+                        //         controller.selectedKey.value=0;
+                        //         controller.groupBy.value=val;
+                        //         controller.groupHandler();
+                        //       }
+                        //     },
+                        //   )
+                        // ),
                       ),
                     ),
                     Expanded(
