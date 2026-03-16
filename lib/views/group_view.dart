@@ -131,8 +131,9 @@ class _GroupViewState extends State<GroupView> {
                               itemCount: controller.groupedData.values.toList()[controller.selectedKey.value].length,
                               itemBuilder: (BuildContext context, int index)=>Material(
                                 child: ListTile(
-                                  tileColor: Colors.white,
+                                  tileColor: Theme.of(context).brightness==Brightness.light ? Colors.white : Colors.grey[900],
                                   minTileHeight: 40,
+                                  mouseCursor: SystemMouseCursors.basic,
                                   title: Text(
                                     controller.groupedData.values.toList()[controller.selectedKey.value][index].name,
                                     style: TextStyle(
