@@ -36,8 +36,6 @@ class _GroupViewState extends State<GroupView> {
     });
   }
 
-  bool hover=false;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -62,14 +60,10 @@ class _GroupViewState extends State<GroupView> {
                             ),
                             customButton: MouseRegion(
                               cursor: SystemMouseCursors.basic,
-                              onEnter: (_) => setState(() => hover = true),
-                              onExit: (_) => setState(() => hover = false),
-                              child: AnimatedContainer(
+                              child: Container(
                                 width: double.infinity,
                                 height: 40,
-                                duration: const Duration(milliseconds: 200),
                                 decoration: BoxDecoration(
-                                  color: hover ? Theme.of(context).colorScheme.primary.withAlpha(12) : Theme.of(context).colorScheme.primary.withAlpha(0),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Padding(
