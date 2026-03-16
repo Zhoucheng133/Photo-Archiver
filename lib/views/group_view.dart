@@ -1,7 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_archiver/components/sidebar_item.dart';
 import 'package:photo_archiver/controllers/controller.dart';
 
@@ -109,14 +108,14 @@ class _GroupViewState extends State<GroupView> {
                                 Expanded(
                                   child: Text(
                                     controller.groupedData.keys.toList()[controller.selectedKey.value],
-                                    style: GoogleFonts.notoSansSc(
+                                    style: TextStyle(
                                       fontSize: 20
                                     ),
                                   ),
                                 ),
                                 Text(
                                   "${controller.groupedData.values.toList()[controller.selectedKey.value].length}张照片",
-                                  style: GoogleFonts.notoSansSc(
+                                  style: TextStyle(
                                     color: Colors.grey,
                                   ),
                                 )
@@ -136,13 +135,13 @@ class _GroupViewState extends State<GroupView> {
                                   minTileHeight: 40,
                                   title: Text(
                                     controller.groupedData.values.toList()[controller.selectedKey.value][index].name,
-                                    style: GoogleFonts.notoSansSc(
+                                    style: TextStyle(
                                       fontSize: 15
                                     ),
                                   ),
                                   subtitle: Text(
                                     controller.groupedData.values.toList()[controller.selectedKey.value][index].getDate(),
-                                    style: GoogleFonts.notoSansSc(
+                                    style: TextStyle(
                                       fontSize: 13
                                     ),
                                   ),
@@ -181,7 +180,7 @@ class _GroupViewState extends State<GroupView> {
                     isCollapsed: true,
                     contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12)
                   ),
-                  style: GoogleFonts.notoSansSc(
+                  style: TextStyle(
                     fontSize: 14
                   ),
                 )

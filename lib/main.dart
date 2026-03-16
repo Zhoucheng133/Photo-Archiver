@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_archiver/controllers/controller.dart';
 import 'package:photo_archiver/main_window.dart';
 import 'package:window_manager/window_manager.dart';
@@ -36,19 +35,21 @@ class MainApp extends StatelessWidget {
     final brightness = MediaQuery.of(context).platformBrightness;
     return MaterialApp(
       navigatorKey: navigatorKey,
-      theme: brightness==Brightness.dark ? ThemeData.dark().copyWith(
-        textTheme: GoogleFonts.notoSansScTextTheme().apply(
-          bodyColor: Colors.white,
-          displayColor: Colors.white, 
+      theme: ThemeData(
+          brightness: brightness==Brightness.dark ? Brightness.dark : Brightness.light,
+          fontFamily: 'PuHui', 
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.lime,
+            brightness: brightness==Brightness.dark ? Brightness.dark : Brightness.light,
+          ),
+          textTheme: brightness==Brightness.dark ? ThemeData.dark().textTheme.apply(
+            fontFamily: 'PuHui',
+            bodyColor: Colors.white,
+            displayColor: Colors.white,
+          ) : ThemeData.light().textTheme.apply(
+            fontFamily: 'PuHui',
+          ),
         ),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.lime,
-          brightness: Brightness.dark,
-        ),
-      ) : ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lime),
-        textTheme: GoogleFonts.notoSansScTextTheme(),
-      ),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: MainWindow()
