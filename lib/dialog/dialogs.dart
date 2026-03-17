@@ -14,7 +14,7 @@ Future<void> showErrWarnDialog(BuildContext context, String title, String conten
       actions: [
         ElevatedButton(
           onPressed: ()=>Navigator.pop(context), 
-          child: const Text('好的')
+          child: Text('ok'.tr)
         )
       ],
     )

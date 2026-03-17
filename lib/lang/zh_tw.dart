@@ -18,4 +18,7 @@ const Map<String, String> zhTW = {
   'archiveFinishContent': '已經將所有圖片檔案以',
   'archiveFinishContentEnd': '方式整理',
   'close': '關閉',
+
+  'scanning': '正在掃描:',
+  'stopScan': '停止掃描',
 };

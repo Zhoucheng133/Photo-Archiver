@@ -21,13 +21,13 @@ class _LoadingViewState extends State<LoadingView> {
         children: [
           CircularProgressIndicator(),
           SizedBox(height: 10,),
-          Obx(()=>Text("正在扫描: ${controller.nowFile.value}")),
+          Obx(()=>Text("${'scanning'.tr} ${controller.nowFile.value}")),
           const SizedBox(height: 20,),
           ElevatedButton(
             onPressed: (){
               controller.stopScan();
             }, 
-            child: const Text('停止扫描')
+            child: Text('stopScan'.tr)
           )
         ],
       ),

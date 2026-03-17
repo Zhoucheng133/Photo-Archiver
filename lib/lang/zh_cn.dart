@@ -18,4 +18,7 @@ const Map<String, String> zhCN = {
   'archiveFinishContent': '已经将所有图片文件以',
   'archiveFinishContentEnd': '方式整理',
   'close': '关闭',
+
+  'scanning': '正在扫描:',
+  'stopScan': '停止扫描',
 };

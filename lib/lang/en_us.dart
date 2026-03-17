@@ -18,4 +18,7 @@ const Map<String, String> enUS = {
   'archiveFinishContent': 'All images have been organized by ',
   'archiveFinishContentEnd': '',
   'close': 'Close',
+
+  'scanning': 'Scanning:',
+  'stopScan': 'Stop',
 };
