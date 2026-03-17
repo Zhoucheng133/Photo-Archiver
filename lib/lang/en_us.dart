@@ -10,7 +10,7 @@ const Map<String, String> enUS = {
   'year-month': 'Year-Month',
   'year': 'Year',
 
-  '-photos': ' Photos',
+  '-photos': ' Photo(s)',
   'cantAnalyze': 'Cannot analyze folder',
   'cantAnalyzeContent': 'The folder contains no image files or none of the files could be parsed.',
   'archive': 'Organize',
