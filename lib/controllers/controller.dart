@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'dart:ffi';
 import 'package:photo_archiver/dialog/dialogs.dart';
 import 'package:path/path.dart' as p;
@@ -22,11 +23,11 @@ enum GroupBy{
 String groupByToString(GroupBy groupBy){
   switch (groupBy) {
     case GroupBy.day:
-      return "年-月-日";
+      return "year-month-day".tr;
     case GroupBy.month:
-      return "年-月";
+      return "year-month".tr;
     case GroupBy.year:
-      return "年份";
+      return "year".tr;
   }
 }
 
@@ -107,7 +108,7 @@ class Controller extends GetxController {
         actions: [
           ElevatedButton(
             onPressed: ()=>Navigator.pop(context), 
-            child: const Text('关闭')
+            child: Text('close'.tr)
           )
         ],
       )
@@ -136,23 +137,24 @@ class Controller extends GetxController {
         } catch (_) {}
       }
     }
-    if(context.mounted) showErrWarnDialog(context, "整理完成", "已经将所有图片文件以${groupByToString(groupBy.value)}方式整理");
+    if(context.mounted) showErrWarnDialog(context, "groupFinish".tr, "${'groupFinishContent'.tr}${groupByToString(groupBy.value)}${'groupFinishContentEnd'.tr}");
   }
 
  void groupHandler({GroupBy? groupBy}){
     groupBy = groupBy ?? this.groupBy.value;
     final Map<String, List<PhotoData>> grouped = {};
     for (var photo in photoList) {
+      DateTime photoDate = DateTime(photo.year, photo.month, photo.day);
       String key;
       switch (groupBy) {
         case GroupBy.year:
-          key='${photo.year}';
+          key=DateFormat.y(lang.value.locale.languageCode).format(photoDate);
           break;
         case GroupBy.month:
-          key="${photo.year}年${photo.month}月";
+          key=DateFormat.yMMM(lang.value.locale.languageCode).format(photoDate);
           break;
         case GroupBy.day:
-          key="${photo.year}年${photo.month}月${photo.day}日";
+          key=DateFormat.yMMMd(lang.value.locale.languageCode).format(photoDate);
           break;
       }
       grouped.putIfAbsent(key, () => []);
@@ -245,8 +247,8 @@ class Controller extends GetxController {
       if(context!=null && context.mounted){
         await showErrWarnDialog(
           context, 
-          "无法解析文件夹", 
-          "文件夹中不含任何图片文件或者无法解析任意一个图片文件"
+          "cantAnalyze".tr, 
+          "cantAnalyzeContent".tr
         );
       }
     }else{

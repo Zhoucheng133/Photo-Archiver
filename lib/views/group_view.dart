@@ -112,7 +112,7 @@ class _GroupViewState extends State<GroupView> {
                                   ),
                                 ),
                                 Text(
-                                  "${controller.groupedData.values.toList()[controller.selectedKey.value].length}张照片",
+                                  "${controller.groupedData.values.toList()[controller.selectedKey.value].length}${'-photos'.tr}",
                                   style: TextStyle(
                                     color: Colors.grey,
                                   ),

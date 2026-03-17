@@ -40,7 +40,7 @@ class _AddViewState extends State<AddView> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
-                  child: Text("添加目录或拖动目录至此"),
+                  child: Text("addDir".tr),
                 )
               ],
             ),
