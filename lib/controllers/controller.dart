@@ -137,7 +137,7 @@ class Controller extends GetxController {
         } catch (_) {}
       }
     }
-    if(context.mounted) showErrWarnDialog(context, "groupFinish".tr, "${'groupFinishContent'.tr}${groupByToString(groupBy.value)}${'groupFinishContentEnd'.tr}");
+    if(context.mounted) showErrWarnDialog(context, "archiveFinish".tr, "${'archiveFinishContent'.tr}${groupByToString(groupBy.value)}${'archiveFinishContentEnd'.tr}");
   }
 
  void groupHandler({GroupBy? groupBy}){

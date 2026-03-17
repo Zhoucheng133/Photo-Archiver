@@ -196,7 +196,7 @@ class _GroupViewState extends State<GroupView> {
                   });
                   controller.closeDir();
                 }, 
-                child: const Text('整理')
+                child: Text('archive'.tr)
               )
             ],
           ),

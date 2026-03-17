@@ -13,8 +13,9 @@ const Map<String, String> zhCN = {
   '-photos': '张照片',
   'cantAnalyze': '无法解析文件夹',
   'cantAnalyzeContent': '文件夹中不含任何图片文件或者无法解析任意一个图片文件',
-  'groupFinish': '整理完成',
-  'groupFinishContent': '已经将所有图片文件以',
-  'groupFinishContentEnd': '方式整理',
+  'archive': '整理',
+  'archiveFinish': '整理完成',
+  'archiveFinishContent': '已经将所有图片文件以',
+  'archiveFinishContentEnd': '方式整理',
   'close': '关闭',
 };
