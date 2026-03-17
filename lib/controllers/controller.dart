@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:ui';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:ffi';
 import 'package:photo_archiver/dialog/dialogs.dart';
 import 'package:path/path.dart' as p;
+import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -54,6 +56,20 @@ class PhotoData{
 typedef ScanDir = Pointer<Utf8> Function(Pointer<Utf8>);
 typedef GetPhoto = Pointer<Utf8> Function(Pointer<Utf8>);
 
+class LanguageType{
+  String name;
+  Locale locale;
+
+  LanguageType(this.name, this.locale);
+}
+
+List<LanguageType> get supportedLocales => [
+  LanguageType("English", const Locale("en", "US")),
+  LanguageType("简体中文", const Locale("zh", "CN")),
+  LanguageType("繁體中文", const Locale("zh", "TW")),
+];
+
+
 class Controller extends GetxController {
 
   RxString dir="".obs;
@@ -61,6 +77,9 @@ class Controller extends GetxController {
   Rx<GroupBy> groupBy=Rx(GroupBy.month);
   RxBool loading=false.obs;
   RxString nowFile="".obs;
+
+  Rx<LanguageType> lang=Rx(supportedLocales[0]);
+  late SharedPreferences prefs;
 
   RxList<int> years=RxList([]);
   RxList<int> month=RxList([]);
@@ -234,5 +253,30 @@ class Controller extends GetxController {
       this.dir.value=dir;
     }
     loading.value = false;
+  }
+
+  Future<void> initLang() async {
+    prefs=await SharedPreferences.getInstance();
+
+    int? langIndex=prefs.getInt("langIndex");
+
+    if(langIndex==null){
+      final deviceLocale=PlatformDispatcher.instance.locale;
+      final local=Locale(deviceLocale.languageCode, deviceLocale.countryCode);
+      int index=supportedLocales.indexWhere((element) => element.locale==local);
+      if(index!=-1){
+        lang.value=supportedLocales[index];
+        lang.refresh();
+      }
+    }else{
+      lang.value=supportedLocales[langIndex];
+    }
+  }
+
+  void changeLanguage(int index){
+    lang.value=supportedLocales[index];
+    prefs.setInt("langIndex", index);
+    lang.refresh();
+    Get.updateLocale(lang.value.locale);
   }
 }
