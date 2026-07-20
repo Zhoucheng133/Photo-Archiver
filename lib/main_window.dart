@@ -82,7 +82,87 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
           child: Obx(()=>
             controller.loading.value ? LoadingView() : controller.dir.isEmpty ? AddView() : GroupView()
           ),
-        )
+        ),
+        Platform.isMacOS ? PlatformMenuBar(
+          menus: [
+            PlatformMenu(
+              label: "Photo Archiver",
+              menus: [
+                PlatformMenuItemGroup(
+                  members: [
+                    PlatformMenuItem(
+                      label: "${'about'.tr} Photo Archiver",
+                      onSelected: (){
+                        showAboutDialog(context: context);
+                      }
+                    )
+                  ]
+                ),
+                const PlatformMenuItemGroup(
+                  members: [
+                    PlatformProvidedMenuItem(
+                      enabled: true,
+                      type: PlatformProvidedMenuItemType.hide,
+                    ),
+                    PlatformProvidedMenuItem(
+                      enabled: true,
+                      type: PlatformProvidedMenuItemType.quit,
+                    ),
+                  ]
+                ),
+              ]
+            ),
+            PlatformMenu(
+              label: "编辑",
+              menus: [
+                PlatformMenuItem(
+                  label: "拷贝",
+                  onSelected: (){
+                    final focusedContext = FocusManager.instance.primaryFocus?.context;
+                    if (focusedContext != null) {
+                      Actions.invoke(focusedContext, CopySelectionTextIntent.copy);
+                    }
+                  }
+                ),
+                PlatformMenuItem(
+                  label: "粘贴",
+                  onSelected: (){
+                    final focusedContext = FocusManager.instance.primaryFocus?.context;
+                    if (focusedContext != null) {
+                      Actions.invoke(focusedContext, const PasteTextIntent(SelectionChangedCause.keyboard));
+                    }
+                  },
+                ),
+                PlatformMenuItem(
+                  label: "全选",
+                  onSelected: (){
+                    final focusedContext = FocusManager.instance.primaryFocus?.context;
+                    if (focusedContext != null) {
+                      Actions.invoke(focusedContext, const SelectAllTextIntent(SelectionChangedCause.keyboard));
+                    }
+                  }
+                )
+              ]
+            ),
+            const PlatformMenu(
+              label: "窗口", 
+              menus: [
+                PlatformMenuItemGroup(
+                  members: [
+                    PlatformProvidedMenuItem(
+                      enabled: true,
+                      type: PlatformProvidedMenuItemType.minimizeWindow,
+                    ),
+                    PlatformProvidedMenuItem(
+                      enabled: true,
+                      type: PlatformProvidedMenuItemType.toggleFullScreen,
+                    )
+                  ]
+                )
+              ]
+            )
+          ]
+        ) : Container()
       ],
     );
   }
