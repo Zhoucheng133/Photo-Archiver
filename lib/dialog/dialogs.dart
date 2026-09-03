@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:photo_archiver/controllers/controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> showErrWarnDialog(BuildContext context, String title, String content) async {
@@ -159,5 +160,98 @@ Future<void> showLanguageDialog(BuildContext context) async {
         )
       ],
     ),
+  );
+}
+
+void darkModePanel(BuildContext context){
+  final controller = Get.find<Controller>();
+
+  bool tmpDarkMode=controller.dark.value;
+  bool tmpAutoDark=controller.autoDark.value;
+
+  showDialog(
+    context: context, 
+    builder: (context)=>AlertDialog(
+      title: Text('darkMode'.tr),
+      content: SizedBox(
+        width: 200,
+        child: Obx(()=>
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: 150,
+                    child: Text('followSystem'.tr)
+                  ),
+                  const SizedBox(width: 10,),
+                  Expanded(child: Container(height: 10,)),
+                  Transform.scale(
+                    scale: 0.7,
+                    child: Switch(
+                      mouseCursor: SystemMouseCursors.basic,
+                      splashRadius: 0,
+                      value: controller.autoDark.value, 
+                      onChanged: (val) async {
+                        controller.autoDark.value=val;
+                        if(val){
+                          final Brightness brightness = MediaQuery.of(context).platformBrightness;
+                          if(brightness == Brightness.dark){
+                            controller.dark.value=true;
+                          }else{
+                            controller.dark.value=false;
+                          }
+                        }
+                      }
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 150,
+                    child: Text('enableDark'.tr)
+                  ),
+                  const SizedBox(width: 10,),
+                  Expanded(child: Container(height: 10,)),
+                  Transform.scale(
+                    scale: 0.7,
+                    child: Switch(
+                      mouseCursor: SystemMouseCursors.basic,
+                      splashRadius: 0,
+                      value: controller.dark.value, 
+                      onChanged: controller.autoDark.value ? null : (val) async {
+                        controller.dark.value=val;
+                      }
+                    ),
+                  )
+                ],
+              ),
+            ],
+          )
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: (){
+            Navigator.pop(context);
+            controller.dark.value=tmpDarkMode;
+            controller.autoDark.value=tmpAutoDark;
+          }, 
+          child: Text('cancel'.tr)
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            Navigator.pop(context);
+            final prefs=await SharedPreferences.getInstance();
+            prefs.setBool('dark', controller.dark.value);
+            prefs.setBool('autoDark', controller.autoDark.value);
+          }, 
+          child: Text('ok'.tr)
+        )
+      ],
+    )
   );
 }

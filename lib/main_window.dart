@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:photo_archiver/controllers/controller.dart';
 import 'package:photo_archiver/dialog/dialogs.dart';
 import 'package:photo_archiver/views/add_view.dart';
-import 'package:photo_archiver/views/group_view.dart';
-import 'package:photo_archiver/views/loading_view.dart';
 import 'package:window_manager/window_manager.dart';
 
 class MainWindow extends StatefulWidget {
@@ -80,9 +78,7 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
           ),
         ),
         Expanded(
-          child: Obx(()=>
-            controller.loading.value ? LoadingView() : controller.dir.isEmpty ? AddView() : GroupView()
-          ),
+          child: AddView()
         ),
         Platform.isMacOS ? PlatformMenuBar(
           menus: [

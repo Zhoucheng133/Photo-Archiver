@@ -1,6 +1,7 @@
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:photo_archiver/controllers/controller.dart';
 import 'package:photo_archiver/dialog/dialogs.dart';
@@ -20,8 +21,8 @@ class _AddViewState extends State<AddView> {
   Widget build(BuildContext context) {
     return DropTarget(
       onDragDone: (detail) async {
-        final dirPath=detail.files[0].path.replaceAll("\\", "/");
-        controller.analyseDir(dirPath, context);
+        // final dirPath=detail.files[0].path.replaceAll("\\", "/");
+        // TODO analyse
       },
       child: Stack(
         children: [
@@ -33,7 +34,7 @@ class _AddViewState extends State<AddView> {
                   onPressed: () async {
                     String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
                     if (selectedDirectory != null && context.mounted) {
-                      controller.analyseDir(selectedDirectory, context);
+                      // TODO analyse
                     }
                   }, 
                   icon: const Icon(Icons.add_rounded)
@@ -67,9 +68,32 @@ class _AddViewState extends State<AddView> {
                   child: Row(
                     mainAxisSize: .min,
                     children: [
-                      Icon(Icons.translate_rounded),
+                      FaIcon(
+                        FontAwesomeIcons.language,
+                        size: 13,
+                      ),
                       SizedBox(width: 5,),
                       Text("language".tr),
+                    ],
+                  )
+                ),
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                  ),
+                  onPressed: ()=>darkModePanel(context), 
+                  child: Row(
+                    mainAxisSize: .min,
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.circleHalfStroke,
+                        size: 13,
+                      ),
+                      SizedBox(width: 5,),
+                      Text("darkMode".tr),
                     ],
                   )
                 ),
@@ -87,7 +111,10 @@ class _AddViewState extends State<AddView> {
                   child: Row(
                     mainAxisSize: .min,
                     children: [
-                      Icon(Icons.info_rounded),
+                      FaIcon(
+                        FontAwesomeIcons.circleInfo,
+                        size: 13,
+                      ),
                       SizedBox(width: 5,),
                       Text("about".tr),
                     ],

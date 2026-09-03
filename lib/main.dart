@@ -27,7 +27,7 @@ Future<void> main() async {
   });
 
   final controller=Get.put(Controller());
-  await controller.initLang();
+  await controller.init();
 
   runApp(const MainApp());
 }
@@ -47,21 +47,21 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final brightness = MediaQuery.of(context).platformBrightness;
     final controller=Get.find<Controller>();
+    bool platformDarkMode=MediaQuery.of(context).platformBrightness==Brightness.dark;
+    controller.darkModeHandler(platformDarkMode);
 
     return Obx(
       ()=> GetMaterialApp(
-        navigatorKey: navigatorKey,
         translations: MainTranslations(), 
         theme: ThemeData(
-          brightness: brightness==Brightness.dark ? Brightness.dark : Brightness.light,
+          brightness: controller.dark.value ? Brightness.dark : Brightness.light,
           fontFamily: 'PuHui', 
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.lime,
-            brightness: brightness==Brightness.dark ? Brightness.dark : Brightness.light,
+            brightness: controller.dark.value ? Brightness.dark : Brightness.light,
           ),
-          textTheme: brightness==Brightness.dark ? ThemeData.dark().textTheme.apply(
+          textTheme: controller.dark.value ? ThemeData.dark().textTheme.apply(
             fontFamily: 'PuHui',
             bodyColor: Colors.white,
             displayColor: Colors.white,
