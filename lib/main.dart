@@ -73,6 +73,9 @@ class MainApp extends StatelessWidget {
           radioTheme: RadioThemeData(
             mouseCursor: WidgetStateProperty.all(SystemMouseCursors.basic),
           ),
+          listTileTheme: Theme.of(context).listTileTheme.copyWith(
+            mouseCursor: WidgetStateProperty.all(SystemMouseCursors.basic),
+          ),
         ),
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

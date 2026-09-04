@@ -1,9 +1,8 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
-import 'package:photo_archiver/components/preview.dart';
+import 'package:photo_archiver/components/image_item.dart';
 import 'package:photo_archiver/controllers/handler.dart';
 
 enum ConfigMode {
@@ -258,7 +257,6 @@ class _ConfigViewState extends State<ConfigView> {
               }
 
               final Map<String, List<PhotoData>> groupedMap = {};
-              final String unknownStr = "unknown".tr;
 
               for (var photo in photos) {
                 String groupKey = "";
@@ -276,9 +274,9 @@ class _ConfigViewState extends State<ConfigView> {
                   }
                 } else {
                   if (locationLevel == LocationLevel.country) {
-                    groupKey = photo.country.isEmpty ? unknownStr : photo.country;
+                    groupKey = photo.country.isEmpty ? "unkownLocation".tr : photo.country;
                   } else {
-                    groupKey = photo.city.isEmpty ? unknownStr : photo.city;
+                    groupKey = photo.city.isEmpty ? "unkownLocation".tr : photo.city;
                   }
                 }
 
@@ -295,13 +293,21 @@ class _ConfigViewState extends State<ConfigView> {
                   final groupPhotos = groupedMap[groupKey]!;
 
                   return Card(
+                    clipBehavior: Clip.antiAlias,
                     margin: const EdgeInsets.only(bottom: 16),
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    elevation: 0,
+                    // shape: RoundedRectangleBorder(
+                    //   borderRadius: BorderRadius.circular(8),
+                    // ),
                     child: ExpansionTile(
                       initiallyExpanded: true,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide.none,
+                      ),
+                      collapsedShape: RoundedRectangleBorder(
+                        side: BorderSide.none,
+                      ),
+                      clipBehavior: Clip.antiAlias,
                       title: Text(
                         groupKey,
                         style: const TextStyle(
@@ -330,53 +336,7 @@ class _ConfigViewState extends State<ConfigView> {
                               final photo = groupPhotos[photoIndex];
                               final filePath = p.join(photo.dir, photo.name);
 
-                              return InkWell(
-                                onTap: () => showPhotoPreview(context, filePath, photo),
-                                borderRadius: BorderRadius.circular(6),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6),
-                                    border: Border.all(
-                                      color: Theme.of(context).dividerColor,
-                                    ),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Expanded(
-                                        child: ClipRRect(
-                                          borderRadius: const BorderRadius.vertical(
-                                            top: Radius.circular(5),
-                                          ),
-                                          child: Image.file(
-                                            File(filePath),
-                                            fit: BoxFit.cover,
-                                            errorBuilder: (context, error, stackTrace) {
-                                              return const Center(
-                                                child: FaIcon(
-                                                  FontAwesomeIcons.image,
-                                                  color: Colors.grey,
-                                                  size: 24,
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Text(
-                                          photo.name,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(fontSize: 11),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
+                              return ImageItem(photoData: photo, filePath: filePath);
                             },
                           ),
                         ),

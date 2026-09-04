@@ -24,6 +24,13 @@ String groupByToString(GroupBy groupBy){
   }
 }
 
+String locationString(PhotoData photoData){
+  if(photoData.city.isEmpty && photoData.country.isEmpty){
+    return "unkownLocation".tr;
+  }
+  return "${photoData.city} ${photoData.country}";
+}
+
 class PhotoData{
   String dir;
   String name;
@@ -106,9 +113,6 @@ class Handler extends GetxController{
       if (photoData!=null){
         photos.add(photoData);
       }
-    }
-    for (var element in photos) {
-      print(element.toJson());
     }
     loading.value=false;
     nowFile.value="";
