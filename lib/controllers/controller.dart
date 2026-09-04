@@ -1,55 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:ffi/ffi.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:ffi';
 import 'package:shared_preferences/shared_preferences.dart';
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-enum GroupBy{
-  day,
-  month,
-  year
-}
-
-String groupByToString(GroupBy groupBy){
-  switch (groupBy) {
-    case GroupBy.day:
-      return "year-month-day".tr;
-    case GroupBy.month:
-      return "year-month".tr;
-    case GroupBy.year:
-      return "year".tr;
-  }
-}
-
-class PhotoData{
-  String dir;
-  String name;
-  int year;
-  int month;
-  int day;
-
-  PhotoData(this.dir, this.name, this.year, this.month, this.day);
-
-  factory PhotoData.decode(Map map){
-    DateTime dateTime = DateTime.parse(map["datetime"].replaceAll('/', '-'));
-    int year = dateTime.year;
-    int month = dateTime.month;
-    int day = dateTime.day;
-
-    return PhotoData(map["dir"], map["name"], year, month, day);
-  }
-
-  String getDate(){
-    return "$year/$month/$day";
-  }
-}
-
-typedef ScanDir = Pointer<Utf8> Function(Pointer<Utf8>);
-typedef GetPhoto = Pointer<Utf8> Function(Pointer<Utf8>);
 
 class LanguageType{
   String name;

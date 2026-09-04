@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_archiver/controllers/controller.dart';
+import 'package:photo_archiver/controllers/handler.dart';
 import 'package:photo_archiver/dialog/dialogs.dart';
 import 'package:photo_archiver/views/add_view.dart';
+import 'package:photo_archiver/views/loading_view.dart';
 import 'package:window_manager/window_manager.dart';
 
 class MainWindow extends StatefulWidget {
@@ -17,6 +19,7 @@ class MainWindow extends StatefulWidget {
 class _MainWindowState extends State<MainWindow> with WindowListener {
 
   final Controller controller=Get.find();
+  final Handler handler=Get.find();
 
   @override
   void initState() {
@@ -78,7 +81,11 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
           ),
         ),
         Expanded(
-          child: AddView()
+          child: Obx(()=>
+            handler.loading.value ?
+            LoadingView() :
+            AddView()
+          )
         ),
         Platform.isMacOS ? PlatformMenuBar(
           menus: [

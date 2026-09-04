@@ -1,5 +1,6 @@
 const Map<String, String> zhCN = {
-  "addDir": "添加目录",
+  "scanDir": "扫描目录",
+  "dargtip": "你也可以拖拽目录到此处",
   "language": "语言",
   "about": "关于",
 
@@ -11,4 +12,5 @@ const Map<String, String> zhCN = {
   "darkMode": "深色模式",
   "followSystem": "跟随系统",
   "enableDark": "启用深色模式",
+  "read": "读取: ",
 };

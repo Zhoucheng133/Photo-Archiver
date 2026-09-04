@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:photo_archiver/controllers/controller.dart';
+import 'package:photo_archiver/controllers/handler.dart';
 import 'package:photo_archiver/dialog/dialogs.dart';
 
 class AddView extends StatefulWidget {
@@ -16,32 +17,44 @@ class AddView extends StatefulWidget {
 class _AddViewState extends State<AddView> {
 
   final Controller controller=Get.find();
+  final Handler handler=Get.find();
 
   @override
   Widget build(BuildContext context) {
     return DropTarget(
       onDragDone: (detail) async {
-        // final dirPath=detail.files[0].path.replaceAll("\\", "/");
-        // TODO analyse
+        final dirPath=detail.files[0].path.replaceAll("\\", "/");
+        await handler.scan(dirPath);
       },
       child: Stack(
         children: [
           Center(
             child: Column(
+              spacing: 5,
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
                   onPressed: () async {
                     String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
                     if (selectedDirectory != null && context.mounted) {
-                      // TODO analyse
+                      await handler.scan(selectedDirectory);
                     }
                   }, 
-                  icon: const Icon(Icons.add_rounded)
+                  // icon: FaIcon(FontAwesomeIcons)
+                  icon: Icon(Icons.manage_search_rounded),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Text("addDir".tr),
+                Text(
+                  "scanDir".tr,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                Text(
+                  "dargtip".tr,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary.withAlpha(120),
+                    fontSize: 13
+                  ),
                 )
               ],
             ),

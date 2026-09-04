@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:photo_archiver/controllers/controller.dart';
+import 'package:photo_archiver/controllers/handler.dart';
 import 'package:photo_archiver/lang/en_us.dart';
 import 'package:photo_archiver/lang/zh_cn.dart';
 import 'package:photo_archiver/lang/zh_tw.dart';
@@ -27,6 +28,7 @@ Future<void> main() async {
   });
 
   final controller=Get.put(Controller());
+  Get.put(Handler());
   await controller.init();
 
   runApp(const MainApp());
