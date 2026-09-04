@@ -70,6 +70,9 @@ class MainApp extends StatelessWidget {
           ) : ThemeData.light().textTheme.apply(
             fontFamily: 'PuHui',
           ),
+          radioTheme: RadioThemeData(
+            mouseCursor: WidgetStateProperty.all(SystemMouseCursors.basic),
+          ),
         ),
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

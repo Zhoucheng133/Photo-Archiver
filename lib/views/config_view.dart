@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
+import 'package:photo_archiver/components/preview.dart';
 import 'package:photo_archiver/controllers/handler.dart';
 
 enum ConfigMode {
@@ -16,6 +17,11 @@ enum TimeLevel {
   y,   // 年
 }
 
+enum LocationLevel {
+  country, // 按国家分类
+  city,    // 按城市分类
+}
+
 class ConfigView extends StatefulWidget {
   const ConfigView({super.key});
 
@@ -26,15 +32,15 @@ class ConfigView extends StatefulWidget {
 class _ConfigViewState extends State<ConfigView> {
   final Handler handler = Get.find();
 
-  ConfigMode _configMode = ConfigMode.time;
-  TimeLevel _timeLevel = TimeLevel.ymd;
+  ConfigMode configMode = ConfigMode.time;
+  TimeLevel timeLevel = TimeLevel.ymd;
+  LocationLevel locationLevel = LocationLevel.city;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
-          // Left Sidebar for classification configuration
           Container(
             width: 260,
             decoration: BoxDecoration(
@@ -52,15 +58,15 @@ class _ConfigViewState extends State<ConfigView> {
                     children: [
                       IconButton(
                         icon: const FaIcon(FontAwesomeIcons.arrowLeft, size: 16),
-                        tooltip: "返回添加页面",
+                        tooltip: "backToAdd".tr,
                         onPressed: () {
                           handler.photos.clear();
                         },
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        "照片归档配置",
-                        style: TextStyle(
+                      Text(
+                        "configTitle".tr,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -73,9 +79,9 @@ class _ConfigViewState extends State<ConfigView> {
                   child: ListView(
                     padding: const EdgeInsets.all(12),
                     children: [
-                      const Text(
-                        "分类方式",
-                        style: TextStyle(
+                      Text(
+                        "classifyMethod".tr,
+                        style: const TextStyle(
                           fontSize: 12,
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,
@@ -83,83 +89,146 @@ class _ConfigViewState extends State<ConfigView> {
                       ),
                       const SizedBox(height: 8),
                       SegmentedButton<ConfigMode>(
-                        segments: const [
+                        segments: [
                           ButtonSegment(
                             value: ConfigMode.time,
-                            label: Text('时间'),
-                            icon: FaIcon(FontAwesomeIcons.clock, size: 12),
+                            label: Text('time'.tr),
+                            icon: const FaIcon(FontAwesomeIcons.clock, size: 12),
                           ),
                           ButtonSegment(
                             value: ConfigMode.location,
-                            label: Text('地点'),
-                            icon: FaIcon(FontAwesomeIcons.locationDot, size: 12),
+                            label: Text('location'.tr),
+                            icon: const FaIcon(FontAwesomeIcons.locationDot, size: 12),
                           ),
                         ],
-                        selected: {_configMode},
+                        selected: {configMode},
                         onSelectionChanged: (Set<ConfigMode> newSelection) {
                           setState(() {
-                            _configMode = newSelection.first;
+                            configMode = newSelection.first;
                           });
                         },
                       ),
                       const SizedBox(height: 20),
-                      if (_configMode == ConfigMode.time) ...[
-                        const Text(
-                          "时间粒度",
-                          style: TextStyle(
+                      if (configMode == ConfigMode.time) ...[
+                        Text(
+                          "timeLevel".tr,
+                          style: const TextStyle(
                             fontSize: 12,
                             color: Colors.grey,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 8),
-                        RadioListTile<TimeLevel>(
-                          title: const Text('年月日 (2026/05/07)'),
-                          value: TimeLevel.ymd,
-                          groupValue: _timeLevel,
+                        RadioGroup<TimeLevel>(
+                          groupValue: timeLevel,
                           onChanged: (val) {
-                            setState(() {
-                              _timeLevel = val!;
-                            });
+                            if (val != null) {
+                              setState(() {
+                                timeLevel = val;
+                              });
+                            }
                           },
-                        ),
-                        RadioListTile<TimeLevel>(
-                          title: const Text('年月 (2026/05)'),
-                          value: TimeLevel.ym,
-                          groupValue: _timeLevel,
-                          onChanged: (val) {
-                            setState(() {
-                              _timeLevel = val!;
-                            });
-                          },
-                        ),
-                        RadioListTile<TimeLevel>(
-                          title: const Text('年 (2026)'),
-                          value: TimeLevel.y,
-                          groupValue: _timeLevel,
-                          onChanged: (val) {
-                            setState(() {
-                              _timeLevel = val!;
-                            });
-                          },
-                        ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ListTile(
+                                mouseCursor: SystemMouseCursors.basic,
+                                leading: Radio<TimeLevel>(
+                                  value: TimeLevel.ymd,
+                                  splashRadius: 0,
+                                  mouseCursor: SystemMouseCursors.basic,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    timeLevel = TimeLevel.ymd;
+                                  });
+                                },
+                                title: Text('timeYMD'.tr),
+                              ),
+                              ListTile(
+                                mouseCursor: SystemMouseCursors.basic,
+                                leading: Radio<TimeLevel>(
+                                  value: TimeLevel.ym,
+                                  splashRadius: 0,
+                                  mouseCursor: SystemMouseCursors.basic,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    timeLevel = TimeLevel.ym;
+                                  });
+                                },
+                                title: Text('timeYM'.tr),
+                              ),
+                              ListTile(
+                                mouseCursor: SystemMouseCursors.basic,
+                                leading: Radio<TimeLevel>(
+                                  value: TimeLevel.y,
+                                  splashRadius: 0,
+                                  mouseCursor: SystemMouseCursors.basic,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    timeLevel = TimeLevel.y;
+                                  });
+                                },
+                                title: Text('timeY'.tr),
+                              ),
+                            ],
+                          ),
+                        )
                       ] else ...[
-                        const Text(
-                          "地点层级",
-                          style: TextStyle(
+                        Text(
+                          "locationLevel".tr,
+                          style: const TextStyle(
                             fontSize: 12,
                             color: Colors.grey,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          child: Text(
-                            '国家 / 城市 (未知地点归为"未知")',
-                            style: TextStyle(fontSize: 13, color: Colors.grey),
-                          ),
-                        ),
+                        RadioGroup(
+                          groupValue: locationLevel,
+                          onChanged: (val){
+                            if(val!=null){
+                              setState(() {
+                                locationLevel=val;
+                              });
+                            }
+                          }, 
+                          child: Column(
+                            mainAxisSize: .min,
+                            children: [
+                              ListTile(
+                                mouseCursor: SystemMouseCursors.basic,
+                                leading: Radio<LocationLevel>(
+                                  value: LocationLevel.city,
+                                  splashRadius: 0,
+                                  mouseCursor: SystemMouseCursors.basic,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    locationLevel = LocationLevel.city;
+                                  });
+                                },
+                                title: Text('locationCity'.tr),
+                              ),
+                              ListTile(
+                                mouseCursor: SystemMouseCursors.basic,
+                                leading: Radio<LocationLevel>(
+                                  value: LocationLevel.country,
+                                  splashRadius: 0,
+                                  mouseCursor: SystemMouseCursors.basic,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    locationLevel = LocationLevel.country;
+                                  });
+                                },
+                                title: Text('locationCountry'.tr),
+                              ),
+                            ],
+                          )
+                        )
                       ],
                     ],
                   ),
@@ -171,32 +240,30 @@ class _ConfigViewState extends State<ConfigView> {
                     width: double.infinity,
                     child: FilledButton.icon(
                       onPressed: () {
-                        // TODO: Implement execution of organization
-                        Get.snackbar("提示", "功能开发中...");
+                        // TODO
                       },
                       icon: const FaIcon(FontAwesomeIcons.play, size: 14),
-                      label: const Text("开始归档"),
+                      label: Text("startArchive".tr),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          // Right content area showing classified groups and photo previews
           Expanded(
             child: Obx(() {
               final photos = handler.photos;
               if (photos.isEmpty) {
-                return const Center(child: Text("暂无照片数据"));
+                return Center(child: Text("noPhotos".tr));
               }
 
-              // Group photos based on current mode
               final Map<String, List<PhotoData>> groupedMap = {};
+              final String unknownStr = "unknown".tr;
 
               for (var photo in photos) {
                 String groupKey = "";
-                if (_configMode == ConfigMode.time) {
-                  switch (_timeLevel) {
+                if (configMode == ConfigMode.time) {
+                  switch (timeLevel) {
                     case TimeLevel.ymd:
                       groupKey = "${photo.year}/${photo.month.toString().padLeft(2, '0')}/${photo.day.toString().padLeft(2, '0')}";
                       break;
@@ -208,9 +275,11 @@ class _ConfigViewState extends State<ConfigView> {
                       break;
                   }
                 } else {
-                  String country = photo.country.isEmpty ? "未知" : photo.country;
-                  String city = photo.city.isEmpty ? "未知" : photo.city;
-                  groupKey = "$country / $city";
+                  if (locationLevel == LocationLevel.country) {
+                    groupKey = photo.country.isEmpty ? unknownStr : photo.country;
+                  } else {
+                    groupKey = photo.city.isEmpty ? unknownStr : photo.city;
+                  }
                 }
 
                 groupedMap.putIfAbsent(groupKey, () => []).add(photo);
@@ -241,7 +310,7 @@ class _ConfigViewState extends State<ConfigView> {
                         ),
                       ),
                       subtitle: Text(
-                        "共 ${groupPhotos.length} 张照片",
+                        "totalPhotos".trParams({'count': '${groupPhotos.length}'}),
                         style: const TextStyle(fontSize: 12),
                       ),
                       children: [
@@ -262,9 +331,7 @@ class _ConfigViewState extends State<ConfigView> {
                               final filePath = p.join(photo.dir, photo.name);
 
                               return InkWell(
-                                onTap: () {
-                                  _showPhotoPreview(context, filePath, photo);
-                                },
+                                onTap: () => showPhotoPreview(context, filePath, photo),
                                 borderRadius: BorderRadius.circular(6),
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -321,59 +388,6 @@ class _ConfigViewState extends State<ConfigView> {
             }),
           ),
         ],
-      ),
-    );
-  }
-
-  void _showPhotoPreview(BuildContext context, String filePath, PhotoData photo) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.black87,
-        insetPadding: const EdgeInsets.all(24),
-        child: Stack(
-          children: [
-            Center(
-              child: InteractiveViewer(
-                child: Image.file(
-                  File(filePath),
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Text(
-                      "无法加载图片",
-                      style: TextStyle(color: Colors.white),
-                    );
-                  },
-                ),
-              ),
-            ),
-            Positioned(
-              top: 16,
-              left: 16,
-              right: 60,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  "${photo.name} (${photo.getDate()} | ${photo.country.isEmpty ? '未知' : photo.country} ${photo.city.isEmpty ? '未知' : photo.city})",
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 16,
-              right: 16,
-              child: IconButton(
-                icon: const FaIcon(FontAwesomeIcons.xmark, color: Colors.white),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
