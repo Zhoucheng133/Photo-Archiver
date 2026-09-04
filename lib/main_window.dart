@@ -6,6 +6,7 @@ import 'package:photo_archiver/controllers/controller.dart';
 import 'package:photo_archiver/controllers/handler.dart';
 import 'package:photo_archiver/dialog/dialogs.dart';
 import 'package:photo_archiver/views/add_view.dart';
+import 'package:photo_archiver/views/config_view.dart';
 import 'package:photo_archiver/views/loading_view.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -82,9 +83,12 @@ class _MainWindowState extends State<MainWindow> with WindowListener {
         ),
         Expanded(
           child: Obx(()=>
-            handler.loading.value ?
-            LoadingView() :
-            AddView()
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: handler.loading.value ?
+                LoadingView(key: ValueKey("loading"),) : handler.photos.isEmpty ?
+                AddView(key: ValueKey("add"),) : ConfigView(key: ValueKey("config"),),
+            )
           )
         ),
         Platform.isMacOS ? PlatformMenuBar(
