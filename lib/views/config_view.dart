@@ -285,7 +285,7 @@ class _ConfigViewState extends State<ConfigView> {
                 String groupKey = "";
                 if (configMode == ConfigMode.time) {
                   switch (timeLevel) {
-                    case TimeLevel.ymd:
+                    case TimeLevel.y:
                       groupKey = DateFormat.y("${controller.lang.value.locale.languageCode}_${controller.lang.value.locale.countryCode}").format(
                         DateTime(photo.year)
                       );
@@ -295,7 +295,7 @@ class _ConfigViewState extends State<ConfigView> {
                         DateTime(photo.year, photo.month)
                       );
                       break;
-                    case TimeLevel.y:
+                    case TimeLevel.ymd:
                       groupKey = DateFormat.yMMMd("${controller.lang.value.locale.languageCode}_${controller.lang.value.locale.countryCode}").format(
                         DateTime(photo.year, photo.month, photo.day)
                       );
