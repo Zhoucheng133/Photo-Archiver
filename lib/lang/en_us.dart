@@ -14,7 +14,7 @@ const Map<String, String> enUS = {
   "enableDark": "Enable Dark Mode",
   "read": "Read: ",
 
-  "configTitle": "Photo Archive Configuration",
+  "configTitle": "Configuration",
   "backToAdd": "Back to Add Page",
   "classifyMethod": "Classification Method",
   "time": "Time",
