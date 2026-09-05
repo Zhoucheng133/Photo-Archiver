@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:photo_archiver/components/image_item.dart';
+import 'package:photo_archiver/controllers/controller.dart';
 import 'package:photo_archiver/controllers/handler.dart';
 
 enum ConfigMode {
@@ -30,6 +32,7 @@ class ConfigView extends StatefulWidget {
 
 class _ConfigViewState extends State<ConfigView> {
   final Handler handler = Get.find();
+  final Controller controller = Get.find();
 
   ConfigMode configMode = ConfigMode.time;
   TimeLevel timeLevel = TimeLevel.ymd;
@@ -263,13 +266,19 @@ class _ConfigViewState extends State<ConfigView> {
                 if (configMode == ConfigMode.time) {
                   switch (timeLevel) {
                     case TimeLevel.ymd:
-                      groupKey = "${photo.year}/${photo.month.toString().padLeft(2, '0')}/${photo.day.toString().padLeft(2, '0')}";
+                      groupKey = DateFormat.y("${controller.lang.value.locale.languageCode}_${controller.lang.value.locale.countryCode}").format(
+                        DateTime(photo.year)
+                      );
                       break;
                     case TimeLevel.ym:
-                      groupKey = "${photo.year}/${photo.month.toString().padLeft(2, '0')}";
+                      groupKey = DateFormat.yMMM("${controller.lang.value.locale.languageCode}_${controller.lang.value.locale.countryCode}").format(
+                        DateTime(photo.year, photo.month)
+                      );
                       break;
                     case TimeLevel.y:
-                      groupKey = "${photo.year}";
+                      groupKey = DateFormat.yMMMd("${controller.lang.value.locale.languageCode}_${controller.lang.value.locale.countryCode}").format(
+                        DateTime(photo.year, photo.month, photo.day)
+                      );
                       break;
                   }
                 } else {
@@ -296,9 +305,6 @@ class _ConfigViewState extends State<ConfigView> {
                     clipBehavior: Clip.antiAlias,
                     margin: const EdgeInsets.only(bottom: 16),
                     elevation: 0,
-                    // shape: RoundedRectangleBorder(
-                    //   borderRadius: BorderRadius.circular(8),
-                    // ),
                     child: ExpansionTile(
                       initiallyExpanded: true,
                       shape: RoundedRectangleBorder(
