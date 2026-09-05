@@ -114,7 +114,7 @@ Future<void> showPhotoPreview(BuildContext context, String filePath, PhotoData p
                             icon: const FaIcon(
                               FontAwesomeIcons.xmark,
                               color: Colors.white,
-                              size: 20,
+                              size: 18,
                             ),
                             onPressed: () => Navigator.of(context).pop(),
                           ),
