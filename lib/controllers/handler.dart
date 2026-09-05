@@ -29,14 +29,16 @@ class PhotoData{
 
   PhotoData(this.dir, this.name, this.year, this.month, this.day, this.country, this.city);
 
-  factory PhotoData.decode(Map map){
+  factory PhotoData.decode(Map map, String locale){
     try {
       DateTime dateTime = DateTime.parse(map["datetime"].replaceAll('/', '-'));
       int year = dateTime.year;
       int month = dateTime.month;
       int day = dateTime.day;
+      String city = map['city'][locale];
+      String country = map['country'][locale];
 
-      return PhotoData(map["dir"], map["name"], year, month, day, (map["country"] as String).trim(), (map["city"] as String).trim());
+      return PhotoData(map["dir"], map["name"], year, month, day, country, city);
     } catch (_) {
       throw FormatException('PhotoData.decode failed');
     }
@@ -79,10 +81,11 @@ class Handler extends GetxController{
 
       String path=params[0];
       final pathPtr = path.toNativeUtf8();
+      String locale=params[1];
 
       try {
         final photo = getPhoto(pathPtr).toDartString();
-        return PhotoData.decode(jsonDecode(photo));
+        return PhotoData.decode(jsonDecode(photo), locale);
       } finally {
         calloc.free(pathPtr);
       }
@@ -92,6 +95,7 @@ class Handler extends GetxController{
   }
 
   Future<void> scan(String dir) async {
+    final Controller controller=Get.find();
     loading.value=true;
     await for (final entity in Directory(dir).list(recursive: false)){
       if (stop.value){
@@ -100,7 +104,10 @@ class Handler extends GetxController{
       }
       if (entity is! File) continue;
       nowFile.value=p.basename(entity.path);
-      PhotoData? photoData = await compute(getPhotoData, [entity.path]);
+      PhotoData? photoData = await compute(getPhotoData, [
+        entity.path, 
+        controller.lang.value.locale.languageCode.toLowerCase()+controller.lang.value.locale.countryCode!.toUpperCase()
+      ]);
       if (photoData!=null){
         photos.add(photoData);
       }
