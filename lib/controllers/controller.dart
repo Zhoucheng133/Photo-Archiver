@@ -21,7 +21,6 @@ class Controller extends GetxController {
 
   late SharedPreferences prefs;
   Rx<LanguageType> lang=Rx(supportedLocales[0]);
-  // late Rx<DarkMode> darkMode;
   RxBool autoDark=true.obs;
   RxBool dark=false.obs;
 

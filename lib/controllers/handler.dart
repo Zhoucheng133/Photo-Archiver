@@ -115,9 +115,9 @@ class Handler extends GetxController{
 
   Future<void> archivePhotos({
     required ArchiveMode mode,
-    required ConfigMode configMode, // 'time' or 'location'
-    required TimeLevel timeLevel, // 'ymd', 'ym', 'y'
-    required LocationLevel locationLevel, // 'country', 'city'
+    required ConfigMode configMode,
+    required TimeLevel timeLevel,
+    required LocationLevel locationLevel,
     String? targetDirectory,
     required Controller controller,
   }) async {
