@@ -5,7 +5,11 @@ import 'dart:io';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
+import 'package:photo_archiver/controllers/controller.dart';
+import 'package:photo_archiver/dialog/dialogs.dart';
+import 'package:photo_archiver/views/config_view.dart';
 
 String locationString(PhotoData photoData){
   if(photoData.city.isEmpty && photoData.country.isEmpty){
@@ -103,5 +107,62 @@ class Handler extends GetxController{
 
   void stopScan(){
     stop.value=true;
+  }
+
+  Future<void> archivePhotos({
+    required ArchiveMode mode,
+    required ConfigMode configMode, // 'time' or 'location'
+    required TimeLevel timeLevel, // 'ymd', 'ym', 'y'
+    required LocationLevel locationLevel, // 'country', 'city'
+    String? targetDirectory,
+    required Controller controller,
+  }) async {
+    loading.value = true;
+    for (var photo in photos) {
+      if (stop.value) {
+        stop.value = false;
+        break;
+      }
+      
+      String subFolder = "";
+      if (configMode == ConfigMode.time) {
+        if (timeLevel == TimeLevel.y) {
+          subFolder = DateFormat.y("${controller.lang.value.locale.languageCode}_${controller.lang.value.locale.countryCode}").format(DateTime(photo.year));
+        } else if (timeLevel == TimeLevel.ym) {
+          subFolder = DateFormat.yMMM("${controller.lang.value.locale.languageCode}_${controller.lang.value.locale.countryCode}").format(DateTime(photo.year, photo.month));
+        } else {
+          subFolder = DateFormat.yMMMd("${controller.lang.value.locale.languageCode}_${controller.lang.value.locale.countryCode}").format(DateTime(photo.year, photo.month, photo.day));
+        }
+      } else {
+        if (locationLevel == LocationLevel.country) {
+          subFolder = photo.country.isEmpty ? "unkownLocation".tr : photo.country;
+        } else {
+          subFolder = photo.city.isEmpty ? "unkownLocation".tr : photo.city;
+        }
+        if (subFolder == "unkownLocation".tr) {
+          continue;
+        }
+      }
+
+      String baseDir = (mode == ArchiveMode.specCopy || mode == ArchiveMode.specMove) ? (targetDirectory ?? photo.dir) : photo.dir;
+      Directory destDir = Directory(p.join(baseDir, subFolder));
+      if (!await destDir.exists()) {
+        await destDir.create(recursive: true);
+      }
+
+      File sourceFile = File(p.join(photo.dir, photo.name));
+      if (await sourceFile.exists()) {
+        String destPath = p.join(destDir.path, photo.name);
+        nowFile.value = photo.name;
+        if (mode == ArchiveMode.specMove || mode == ArchiveMode.curMove) {
+          await sourceFile.rename(destPath);
+          photo.dir = destDir.path;
+        } else {
+          await sourceFile.copy(destPath);
+        }
+      }
+    }
+    loading.value = false;
+    nowFile.value = "";
   }
 }

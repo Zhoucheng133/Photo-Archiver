@@ -31,4 +31,12 @@ const Map<String, String> zhCN = {
   "noPhotos": "暂无照片数据",
   "totalPhotos": "共 @count 张照片",
   "unableToLoad": "无法加载图片",
+  "archiveMode": "归档模式",
+  "currentDirMove": "在当前目录下分类（移动）",
+  "currentDirCopy": "在当前目录下分类（复制）",
+  "specifiedDirMove": "在指定目录下分类（移动）",
+  "specifiedDirCopy": "在指定目录下分类（复制）",
+  "selectArchiveMode": "选择归档模式",
+  "success": "成功",
+  "archiveComplete": "归档完成",
 };

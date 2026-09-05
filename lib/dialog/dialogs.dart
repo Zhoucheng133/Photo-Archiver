@@ -6,6 +6,106 @@ import 'package:photo_archiver/controllers/controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+enum ArchiveMode{
+  curCopy,
+  curMove,
+  specCopy,
+  specMove,
+}
+
+Future<ArchiveMode?> showArchiveModeDialog(BuildContext context) async {
+  ArchiveMode? selectedMode;
+  return await showDialog<ArchiveMode>(
+    context: context,
+    builder: (context) => StatefulBuilder(
+      builder: (context, setState) => AlertDialog(
+        title: Text('selectArchiveMode'.tr),
+        content: RadioGroup<ArchiveMode>(
+          groupValue: selectedMode,
+          onChanged: (val) {
+            if (val != null) {
+              setState(() {
+                selectedMode = val;
+              });
+            }
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                mouseCursor: SystemMouseCursors.basic,
+                leading: Radio<ArchiveMode>(
+                  value: ArchiveMode.curCopy,
+                  splashRadius: 0,
+                  mouseCursor: SystemMouseCursors.basic,
+                ),
+                onTap: () {
+                  setState(() {
+                    selectedMode = ArchiveMode.curCopy;
+                  });
+                },
+                title: Text('currentDirCopy'.tr),
+              ),
+              ListTile(
+                mouseCursor: SystemMouseCursors.basic,
+                leading: Radio<ArchiveMode>(
+                  value: ArchiveMode.curMove,
+                  splashRadius: 0,
+                  mouseCursor: SystemMouseCursors.basic,
+                ),
+                onTap: () {
+                  setState(() {
+                    selectedMode = ArchiveMode.curMove;
+                  });
+                },
+                title: Text('currentDirMove'.tr),
+              ),
+              ListTile(
+                mouseCursor: SystemMouseCursors.basic,
+                leading: Radio<ArchiveMode>(
+                  value: ArchiveMode.specCopy,
+                  splashRadius: 0,
+                  mouseCursor: SystemMouseCursors.basic,
+                ),
+                onTap: () {
+                  setState(() {
+                    selectedMode = ArchiveMode.specCopy;
+                  });
+                },
+                title: Text('specifiedDirCopy'.tr),
+              ),
+              ListTile(
+                mouseCursor: SystemMouseCursors.basic,
+                leading: Radio<ArchiveMode>(
+                  value: ArchiveMode.specMove,
+                  splashRadius: 0,
+                  mouseCursor: SystemMouseCursors.basic,
+                ),
+                onTap: () {
+                  setState(() {
+                    selectedMode = ArchiveMode.specMove;
+                  });
+                },
+                title: Text('specifiedDirMove'.tr),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, null),
+            child: Text('cancel'.tr),
+          ),
+          ElevatedButton(
+            onPressed: selectedMode==null ? null : () => Navigator.pop(context, selectedMode),
+            child: Text('ok'.tr),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 Future<void> showErrWarnDialog(BuildContext context, String title, String content) async {
   await showDialog(
     context: context, 

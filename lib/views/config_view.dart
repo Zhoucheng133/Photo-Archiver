@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:path/path.dart' as p;
 import 'package:photo_archiver/components/image_item.dart';
 import 'package:photo_archiver/controllers/controller.dart';
 import 'package:photo_archiver/controllers/handler.dart';
+import 'package:photo_archiver/dialog/dialogs.dart';
 
 enum ConfigMode {
   time,
@@ -241,8 +243,26 @@ class _ConfigViewState extends State<ConfigView> {
                   child: SizedBox(
                     width: double.infinity,
                     child: FilledButton.icon(
-                      onPressed: () {
-                        // TODO
+                      onPressed: () async {
+                        ArchiveMode? mode = await showArchiveModeDialog(context);
+                        if (mode != null) {
+                          String? targetDir;
+                          if (mode == ArchiveMode.specMove || mode == ArchiveMode.specCopy) {
+                            targetDir = await FilePicker.platform.getDirectoryPath();
+                            if (targetDir == null) return;
+                          }
+                          await handler.archivePhotos(
+                            mode: mode,
+                            configMode: configMode,
+                            timeLevel: timeLevel,
+                            locationLevel: locationLevel,
+                            targetDirectory: targetDir,
+                            controller: controller,
+                          );
+                          if (context.mounted) {
+                            showErrWarnDialog(context, "success".tr, "archiveComplete".tr);
+                          }
+                        }
                       },
                       icon: const FaIcon(FontAwesomeIcons.play, size: 14),
                       label: Text("startArchive".tr),
