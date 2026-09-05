@@ -78,10 +78,14 @@ class Handler extends GetxController{
         .asFunction<GetPhoto>();
 
       String path=params[0];
+      final pathPtr = path.toNativeUtf8();
 
-      final photo = getPhoto(path.toNativeUtf8()).toDartString();
-
-      return PhotoData.decode(jsonDecode(photo));
+      try {
+        final photo = getPhoto(pathPtr).toDartString();
+        return PhotoData.decode(jsonDecode(photo));
+      } finally {
+        calloc.free(pathPtr);
+      }
     } catch (e) {
       return null;
     }
