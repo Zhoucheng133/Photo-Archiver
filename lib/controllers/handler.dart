@@ -7,23 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
 
-enum GroupBy{
-  day,
-  month,
-  year
-}
-
-String groupByToString(GroupBy groupBy){
-  switch (groupBy) {
-    case GroupBy.day:
-      return "year-month-day".tr;
-    case GroupBy.month:
-      return "year-month".tr;
-    case GroupBy.year:
-      return "year".tr;
-  }
-}
-
 String locationString(PhotoData photoData){
   if(photoData.city.isEmpty && photoData.country.isEmpty){
     return "unkownLocation".tr;
