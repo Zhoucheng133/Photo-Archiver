@@ -18,6 +18,10 @@ PhotoArchiver is a utility tool designed to organize and categorize photos withi
 > **Prerequisites:**
 > - **EXIF Metadata:** This tool relies entirely on the EXIF metadata of the photos. Photos lacking necessary EXIF information (such as timestamps) will be skipped.
 > - **GPS Location:** To use the "Organize by Location" feature, the capture device must support GPS geotagging and record coordinate data (e.g., smartphones usually do, while most traditional standalone cameras do not).
+> - **Location Resolution Notes:**
+>   - Obtaining photo location information **does not require an internet connection**, provided by [geobed](https://github.com/andreiashu/geobed).
+>   - This library does not provide multi-language city name mapping, so Simplified/Traditional Chinese conversion may have issues.
+>   - Some location mappings may vary or be imprecise (e.g., some photos can be resolved down to the district/county level, while others only down to the city level).
 
 The repository for the Dynamic Link Library (Core) components can be found [HERE](https://github.com/Zhoucheng133/PhotoArchiver-Core).
 
