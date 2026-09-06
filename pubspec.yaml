@@ -46,6 +46,6 @@ msix_config:
   logo_path: assets/icon.png
   trim_logo: false
   capabilities: internetClient
-  languages: zh-cn
+  languages: zh-cn, en-us, zh-tw
   publisher: # Publisher HERE
   store: true
