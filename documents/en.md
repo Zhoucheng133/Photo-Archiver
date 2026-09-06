@@ -24,9 +24,9 @@ The repository for the Dynamic Link Library (Core) components can be found [HERE
 ## Features
 
 - **Organize by Time**: Automatically extracts EXIF capture timestamps to sort and archive photos into structured folders by year, month, or timeline.
-- **Organize by Location**: Intelligent grouping based on embedded GPS coordinates, organizing photos by country, region, or specific locations.
+- **Organize by Location**: Intelligent   grouping based on embedded GPS coordinates, organizing photos by country, region, or specific locations.
 
 ## Screenshots
 
-<img src="screenshots/en/1.png" width=500>
-<img src="screenshots/en/2.png" width=500>
+<img src="screenshots/en/1.png">
+<img src="screenshots/en/2.png">

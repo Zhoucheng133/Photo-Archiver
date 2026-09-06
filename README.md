@@ -28,5 +28,5 @@ PhotoArchiver 是一款能够将文件夹内的照片按照**时间整理**和**
 
 ## 截图
 
-<img src="screenshots/cn/1.png" width=500>
-<img src="screenshots/cn/2.png" width=500>
+<img src="screenshots/cn/1.png">
+<img src="screenshots/cn/2.png">
