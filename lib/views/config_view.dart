@@ -312,7 +312,14 @@ class _ConfigViewState extends State<ConfigView> {
                 groupedMap.putIfAbsent(groupKey, () => []).add(photo);
               }
 
-              final sortedKeys = groupedMap.keys.toList()..sort();
+              final sortedKeys = groupedMap.keys.toList()..sort((a, b) {
+                final unknownText = "unkownLocation".tr;
+                if (configMode == ConfigMode.location) {
+                  if (a == unknownText) return 1;
+                  if (b == unknownText) return -1;
+                }
+                return a.compareTo(b);
+              });
 
               return ListView.builder(
                 padding: const EdgeInsets.all(16),
