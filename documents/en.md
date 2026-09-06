@@ -1,5 +1,7 @@
 # PhotoArchiver
 
+[中文版本](../README.md)
+
 ## Introduction
 
 <img src="../assets/icon.png" width="100px">
@@ -10,13 +12,21 @@
   <img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
 </a>
 
-PhotoArchiver is a utility tool designed to organize multiple photos within a folder into a chronological structure.
+PhotoArchiver is a utility tool designed to organize and categorize photos within a folder by **Time** and **Location**.
 
-> [!IMPORTANT]  
-> This tool relies on the **EXIF metadata** of the photos. If a photo does not contain timestamp information, it will be skipped.
+> [!IMPORTANT]
+> **Prerequisites:**
+> - **EXIF Metadata:** This tool relies entirely on the EXIF metadata of the photos. Photos lacking necessary EXIF information (such as timestamps) will be skipped.
+> - **GPS Location:** To use the "Organize by Location" feature, the capture device must support GPS geotagging and record coordinate data (e.g., smartphones usually do, while most traditional standalone cameras do not).
 
 The repository for the Dynamic Link Library (Core) components can be found [HERE](https://github.com/Zhoucheng133/PhotoArchiver-Core).
 
+## Features
+
+- **Organize by Time**: Automatically extracts EXIF capture timestamps to sort and archive photos into structured folders by year, month, or timeline.
+- **Organize by Location**: Intelligent grouping based on embedded GPS coordinates, organizing photos by country, region, or specific locations.
+
 ## Screenshots
 
-<img src="../demo/en/demo.png" width="600px">
+<img src="screenshots/en/1.png" width=500>
+<img src="screenshots/en/2.png" width=500>
