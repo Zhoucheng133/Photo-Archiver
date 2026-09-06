@@ -175,5 +175,6 @@ class Handler extends GetxController{
     }
     loading.value = false;
     nowFile.value = "";
+    photos.value=[];
   }
 }
