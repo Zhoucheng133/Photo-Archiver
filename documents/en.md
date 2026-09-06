@@ -28,5 +28,5 @@ The repository for the Dynamic Link Library (Core) components can be found [HERE
 
 ## Screenshots
 
-<img src="screenshots/en/1.png">
-<img src="screenshots/en/2.png">
+<img src="../screenshots/en/1.png">
+<img src="../screenshots/en/2.png">
