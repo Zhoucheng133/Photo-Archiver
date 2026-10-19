@@ -39,4 +39,5 @@ const Map<String, String> zhTW = {
   "selectArchiveMode": "選擇歸檔模式",
   "success": "成功",
   "archiveComplete": "歸檔完成",
+  "loadMore": "加載更多 (剩餘 @count 張)",
 };

@@ -39,4 +39,5 @@ const Map<String, String> enUS = {
   "selectArchiveMode": "Select Archive Mode",
   "success": "Success",
   "archiveComplete": "Archive Complete",
+  "loadMore": "Load More (@count remaining)",
 };
