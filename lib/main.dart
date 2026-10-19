@@ -12,6 +12,9 @@ import 'package:window_manager/window_manager.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
+  final imageCache = PaintingBinding.instance.imageCache;
+  imageCache.maximumSize = 100;
+  imageCache.maximumSizeBytes = 50 << 20;
 
   WindowOptions windowOptions = WindowOptions(
     size: Size(800, 600),
