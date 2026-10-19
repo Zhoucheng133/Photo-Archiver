@@ -39,6 +39,8 @@ class _ConfigViewState extends State<ConfigView> {
   ConfigMode configMode = ConfigMode.time;
   TimeLevel timeLevel = TimeLevel.ymd;
   LocationLevel locationLevel = LocationLevel.city;
+  final Map<String, int> _groupLimits = {};
+  static const int _pageSize = 50;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +67,7 @@ class _ConfigViewState extends State<ConfigView> {
                         tooltip: "backToAdd".tr,
                         onPressed: () {
                           handler.photos.clear();
+                          _groupLimits.clear();
                         },
                       ),
                       const SizedBox(width: 8),
@@ -109,6 +112,7 @@ class _ConfigViewState extends State<ConfigView> {
                         onSelectionChanged: (Set<ConfigMode> newSelection) {
                           setState(() {
                             configMode = newSelection.first;
+                            _groupLimits.clear();
                           });
                         },
                       ),
@@ -129,6 +133,7 @@ class _ConfigViewState extends State<ConfigView> {
                             if (val != null) {
                               setState(() {
                                 timeLevel = val;
+                                _groupLimits.clear();
                               });
                             }
                           },
@@ -145,6 +150,7 @@ class _ConfigViewState extends State<ConfigView> {
                                 onTap: () {
                                   setState(() {
                                     timeLevel = TimeLevel.ymd;
+                                    _groupLimits.clear();
                                   });
                                 },
                                 title: Text('timeYMD'.tr),
@@ -159,6 +165,7 @@ class _ConfigViewState extends State<ConfigView> {
                                 onTap: () {
                                   setState(() {
                                     timeLevel = TimeLevel.ym;
+                                    _groupLimits.clear();
                                   });
                                 },
                                 title: Text('timeYM'.tr),
@@ -173,6 +180,7 @@ class _ConfigViewState extends State<ConfigView> {
                                 onTap: () {
                                   setState(() {
                                     timeLevel = TimeLevel.y;
+                                    _groupLimits.clear();
                                   });
                                 },
                                 title: Text('timeY'.tr),
@@ -196,11 +204,12 @@ class _ConfigViewState extends State<ConfigView> {
                             if(val!=null){
                               setState(() {
                                 locationLevel=val;
+                                _groupLimits.clear();
                               });
                             }
                           }, 
                           child: Column(
-                            mainAxisSize: .min,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               ListTile(
                                 mouseCursor: SystemMouseCursors.basic,
@@ -212,6 +221,7 @@ class _ConfigViewState extends State<ConfigView> {
                                 onTap: () {
                                   setState(() {
                                     locationLevel = LocationLevel.city;
+                                    _groupLimits.clear();
                                   });
                                 },
                                 title: Text('locationCity'.tr),
@@ -226,6 +236,7 @@ class _ConfigViewState extends State<ConfigView> {
                                 onTap: () {
                                   setState(() {
                                     locationLevel = LocationLevel.country;
+                                    _groupLimits.clear();
                                   });
                                 },
                                 title: Text('locationCountry'.tr),
@@ -355,21 +366,47 @@ class _ConfigViewState extends State<ConfigView> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(12.0),
-                          child: GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 140,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10,
-                              childAspectRatio: 1,
-                            ),
-                            itemCount: groupPhotos.length,
-                            itemBuilder: (context, photoIndex) {
-                              final photo = groupPhotos[photoIndex];
-                              final filePath = p.join(photo.dir, photo.name);
+                          child: Builder(
+                            builder: (context) {
+                              final limit = _groupLimits[groupKey] ?? _pageSize;
+                              final displayedPhotos = groupPhotos.take(limit).toList();
+                              final hasMore = groupPhotos.length > limit;
 
-                              return ImageItem(photoData: photo, filePath: filePath);
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  GridView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                                      maxCrossAxisExtent: 140,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10,
+                                      childAspectRatio: 1,
+                                    ),
+                                    itemCount: displayedPhotos.length,
+                                    itemBuilder: (context, photoIndex) {
+                                      final photo = displayedPhotos[photoIndex];
+                                      final filePath = p.join(photo.dir, photo.name);
+
+                                      return ImageItem(photoData: photo, filePath: filePath);
+                                    },
+                                  ),
+                                  if (hasMore) ...[
+                                    const SizedBox(height: 12),
+                                    Center(
+                                      child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _groupLimits[groupKey] = limit + _pageSize;
+                                          });
+                                        },
+                                        child: Text("loadMore".trParams({'count': '${groupPhotos.length - limit}'})),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              );
                             },
                           ),
                         ),
